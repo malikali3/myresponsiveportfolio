@@ -52,6 +52,12 @@ h1,h2,h3,h4,h5,h6 {
     font-size: 20px;
 }
 
+.heading-3a{
+    font-size: 20px;
+    color:white;
+    display: inline-block;
+}
+
 a {
     color: var(--c-dark);
     text-decoration: none;
@@ -306,7 +312,7 @@ section {
     }
     
     .three-col-grid {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(1, 3fr);
     }
     
 }
@@ -314,7 +320,7 @@ section {
 
 /* Service */
 #services .grid {
-    gap: 0px;
+    gap: 10px;
 }
 .service:nth-child(even) {
     background-color: peachpuff;
@@ -506,4 +512,31 @@ footer .social-icons a:not(:last-child) {
 #blog .heading-2{
     color: #f8f8f8;
 }
+
+.skill-level {
+    display: flex;
+    align-items: center;
+}
+
+.dot-progress {
+    display: flex;
+    gap: 5px; /* Adjust the spacing between dots as needed */
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: #4caf50; /* Color of the dots */
+    border-radius: 50%;
+}
+
+.dotc {
+    width: 10px;
+    height: 10px;
+    background-color:orange; /* Color of the dots */
+    border-radius: 50%;
+}
+
+
+
 

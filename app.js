@@ -30,10 +30,11 @@ navLinksLi.forEach(li => li.addEventListener('click', ()=> {
 // Typed js
 var options = {
     strings: [
+        'Product Manager',
         'UX Designer', 
         'Programmer',
         'Educator',
-        'Your Growth Partner'
+        
     ],
     typeSpeed: 120,
     loop: true,
