@@ -58,6 +58,12 @@ h1,h2,h3,h4,h5,h6 {
     display: inline-block;
 }
 
+.heading-3b{
+    font-size: 20px;
+    color:var(--c-body);
+    display: inline-block;
+}
+
 a {
     color: var(--c-dark);
     text-decoration: none;
@@ -298,7 +304,7 @@ section {
 }
 
 .three-col-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
 }
 
 @media (max-width: 768px) {
@@ -400,6 +406,22 @@ section {
 
 .blog-post h3 {
     margin-top: 16px;
+}
+
+
+.blog-posth{
+    display: inline-block; /* Display items inline */
+    margin-top: 10px; /* Adjust as needed */
+    margin-left: 105px; /* Adjust as needed */
+    width: 300px;
+
+}
+
+
+.horizontal-scroll {
+    overflow-x: auto;
+    white-space: nowrap;
+    width: 100%; /* Set the width as needed */
 }
 
 /* contact */
@@ -526,7 +548,7 @@ footer .social-icons a:not(:last-child) {
 .dot {
     width: 10px;
     height: 10px;
-    background-color: #4caf50; /* Color of the dots */
+    background-color:var(--c-dark); /* Color of the dots */
     border-radius: 50%;
 }
 
@@ -536,7 +558,40 @@ footer .social-icons a:not(:last-child) {
     background-color:orange; /* Color of the dots */
     border-radius: 50%;
 }
+.dotb {
+    width: 10px;
+    height: 10px;
+    background-color:var(--c-brand); /* Color of the dots */
+    border-radius: 50%;
+}
+.dotckight {
+    width: 10px;
+    height: 10px;
+    background-color:var(--c-light); /* Color of the dots */
+    border-radius: 50%;
+}
 
+
+.scroll-indicators {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+}
+
+.scroll-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #999;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.scroll-indicator.active {
+    background-color: #333;
+}
 
 
 
