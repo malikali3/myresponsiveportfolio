@@ -503,7 +503,7 @@
 
                     <div class="blog-posth" data-aos="flip-left" data-aos-delay="500">
 
-                        <a href="https://muqabla.io/" target="_blank">
+                        <a href="https://drive.google.com/file/d/1IYlmbflXOTTiKGOEuYfRW70oa5z7Rkpv/view?usp=share_link" target="_blank">
                             <img src="focus.png" alt="">
                         </a>
                     </div>
@@ -516,10 +516,17 @@
                         </a>
                     </div>
 
-                    <div class="blog-posth" data-aos="flip-left" data-aos-delay="300">
+                    <div class="blog-posth" data-aos="flip-left" data-aos-delay="800">
 
                         <a href="https://muqabla.io/" target="_blank">
                             <img src="steffy.jpeg" alt="">
+                        </a>
+                    </div>
+
+                    <div class="blog-posth" data-aos="flip-left" data-aos-delay="800">
+
+                        <a href="https://muqabla.io/" target="_blank">
+                            <img src="sirai.jpeg" alt="">
                         </a>
                     </div>
 
@@ -600,42 +607,7 @@
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="app.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const scrollWrapper = document.querySelector('.horizontal-scroll');
-            const indicatorsContainer = document.querySelector('.scroll-indicators');
-            const blogPosts = document.querySelectorAll('.blog-posth');
     
-            blogPosts.forEach((post, index) => {
-                const indicator = document.createElement('div');
-                indicator.classList.add('scroll-indicator');
-                indicatorsContainer.appendChild(indicator);
-    
-                indicator.addEventListener('click', () => {
-                    scrollWrapper.scrollTo({
-                        left: post.offsetLeft,
-                        behavior: 'smooth',
-                    });
-                });
-            });
-    
-            // Update indicators on scroll
-            scrollWrapper.addEventListener('scroll', () => {
-                const scrollLeft = scrollWrapper.scrollLeft;
-    
-                blogPosts.forEach((post, index) => {
-                    const indicator = indicatorsContainer.children[index];
-                    const postLeft = post.offsetLeft;
-    
-                    if (scrollLeft >= postLeft && scrollLeft < postLeft + post.offsetWidth) {
-                        indicator.classList.add('active');
-                    } else {
-                        indicator.classList.remove('active');
-                    }
-                });
-            });
-        });
-    </script>
     
     
 </body>
