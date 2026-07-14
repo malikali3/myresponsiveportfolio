@@ -348,11 +348,58 @@
   footer{ padding:36px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
   footer .mono{ font-size:0.7rem; color:var(--paper-dim); }
 
+  /* ---------- two-column layout sections (Meet the Teacher / Levels) ---------- */
+  .split-section{ padding:120px 0; }
+  .split-section.bg-2{ background:var(--ink-2); }
+  .split-grid{ display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+  .book-circle{ margin:0 auto; }
+  .book-circle-lg{ width:260px; height:260px; }
+  .book-circle-md{ width:220px; height:220px; }
+
   @media (max-width: 860px){
     nav{ display:none; }
-    .card-grid{ grid-template-columns:1fr; }
-    .craft-inner{ grid-template-columns:1fr; }
+    .wrap{ padding:0 20px; }
+    .card-grid{ grid-template-columns:1fr; gap:18px; }
+    .craft-inner{ grid-template-columns:1fr; gap:40px; }
     .craft-visual{ height:260px; }
+
+    /* two-column sections (Meet the Teacher / Levels) collapse to a single column */
+    .split-section{ padding:72px 0; }
+    .split-grid{ grid-template-columns:1fr; gap:36px; }
+    .book-circle-lg{ width:180px; height:180px; }
+    .book-circle-md{ width:150px; height:150px; }
+
+    .section-head{ padding:80px 0 40px; }
+    .process{ padding:40px 0 90px; }
+    .process-list{ margin-left:4px; }
+    .process-item{ padding:28px 0 28px 36px; }
+    .craft{ padding:0 0 90px; }
+    .cta{ padding:90px 0; }
+    .collection{ padding-bottom:90px; }
+    .meet-block{ padding:26px 22px; }
+    .notice-board{ padding:28px 20px 22px; }
+    .note-card{ padding:18px 18px; }
+    .card{ padding:26px 22px 24px; }
+
+    .hero-ctas{ flex-direction:column; width:100%; }
+    .hero-ctas a{ width:100%; }
+    .btn-primary, .btn-ghost{ width:100%; text-align:center; justify-content:center; }
+
+    .socials{ gap:10px; }
+    .socials a{ font-size:0.72rem; padding:8px 14px; }
+    footer .wrap{ flex-direction:column; text-align:center; }
+  }
+
+  @media (max-width: 480px){
+    .hero p.sub{ font-size:0.95rem; }
+    .marquee-track, .marquee-track span{ gap:30px; }
+    .marquee-track span{ font-size:1rem; }
+    #musicToggle{ width:46px; height:46px; bottom:18px; right:18px; }
+    .meet-block{ padding:22px 18px; }
+    .card{ padding:22px 18px 20px; }
+    .box-left{ padding-right:3vw; }
+    .box-right{ padding-left:3vw; }
+    .box-panel .word{ font-size:clamp(1.4rem, 8vw, 4.4rem); }
   }
 
   @media (prefers-reduced-motion: reduce){
@@ -406,12 +453,12 @@
 </div>
 
 <!-- Second Section: Meet the Teacher — grid of colored blocks -->
-<section id="meet" style="padding: 120px 0;">
+<section id="meet" class="split-section">
   <div class="wrap">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+    <div class="split-grid">
       <!-- Book landing circle: empty target, the single floating book flies in here -->
       <div class="reveal" style="text-align: center;">
-        <div id="bookCircle1" class="book-landing-circle" style="width: 260px; height: 260px; margin: 0 auto;">
+        <div id="bookCircle1" class="book-landing-circle book-circle book-circle-lg">
         </div>
       </div>
 
@@ -440,12 +487,12 @@
 </section>
 
 <!-- Third Section: Levels with book landing -->
-<section id="levels" style="padding: 140px 0; background: var(--ink-2);">
+<section id="levels" class="split-section bg-2">
   <div class="wrap">
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+    <div class="split-grid">
       <!-- Book side: empty target, the single floating book flies in here from section 2 -->
       <div class="reveal" style="text-align: center;">
-        <div id="bookCircle2" class="book-landing-circle" style="width: 220px; height: 220px; margin: 0 auto;">
+        <div id="bookCircle2" class="book-landing-circle book-circle book-circle-md">
         </div>
       </div>
 
