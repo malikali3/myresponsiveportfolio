@@ -1,0 +1,2839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Malik Ali | Business and Accounts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0A0A0A;
+    --ink-2:#171310;
+    --paper:#FFF7ED;
+    --paper-dim:#D8C4AE;
+    --violet:#FF7A1A;
+    --pink:#E5383B;
+    --yellow:#FFD23F;
+    --green:#1A1A1A;
+    --line: rgba(255,247,237,0.12);
+    --ease: cubic-bezier(.16,.8,.24,1);
+    --dur-s: 0.4s;
+    --dur-m: 0.9s;
+    --dur-l: 1.6s;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:'Inter', sans-serif;
+    overflow-x:hidden;
+    cursor:none;
+  }
+  body.is-loading{ overflow:hidden; height:100vh; }
+
+  /* ---------- loading screen: logo breathing on black ---------- */
+  #loadingScreen{
+    position:fixed; inset:0; z-index:10000;
+    background:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity 0.7s var(--ease), visibility 0.7s var(--ease);
+  }
+  #loadingScreen.is-hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+  #loadingScreen .loader-mark{
+    width:96px; height:96px;
+    animation: breathe 2.2s ease-in-out infinite;
+  }
+  #loadingScreen .loader-mark svg{ width:100%; height:100%; display:block; }
+  @keyframes breathe{
+    0%, 100%{ opacity:0.25; transform:scale(0.88); filter:drop-shadow(0 0 0 rgba(255,122,26,0)); }
+    50%{ opacity:1; transform:scale(1.05); filter:drop-shadow(0 10px 26px rgba(255,122,26,0.45)); }
+  }
+  #loadingScreen .loader-label{
+    position:absolute; bottom:14%; left:50%; transform:translateX(-50%);
+    font-family:'JetBrains Mono', monospace; font-size:0.7rem; letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--paper); opacity:0.5;
+    animation: breathe-label 2.2s ease-in-out infinite;
+  }
+  @keyframes breathe-label{ 0%,100%{ opacity:0.25; } 50%{ opacity:0.65; } }
+  @media (prefers-reduced-motion: reduce){
+    #loadingScreen .loader-mark, #loadingScreen .loader-label{ animation:none; opacity:1; }
+  }
+  ::selection{ background:var(--yellow); color:var(--ink); }
+
+  h1,h2,h3{ font-family:'Space Grotesk', sans-serif; font-weight:600; letter-spacing:-0.01em; }
+  .mono{ font-family:'JetBrains Mono', monospace; letter-spacing:0.04em; }
+  a{ color:inherit; text-decoration:none; }
+
+  /* ---------- custom cursor ---------- */
+  .cursor{
+    position:fixed; top:0; left:0; width:18px; height:18px;
+    border-radius:50%; border:1px solid var(--yellow);
+    pointer-events:none; z-index:9999; transform:translate(-50%,-50%);
+    transition: width var(--dur-s) var(--ease), height var(--dur-s) var(--ease), background var(--dur-s) var(--ease), border-color var(--dur-s) var(--ease);
+    mix-blend-mode:difference;
+  }
+  .cursor.hover{ width:52px; height:52px; background:var(--yellow); border-color:var(--yellow); }
+  @media (hover:none), (pointer:coarse){ .cursor{ display:none; } body{ cursor:auto; } }
+
+  /* ---------- glowing word trail ---------- */
+  .cursor-word{
+    position:fixed; top:0; left:0; z-index:9998;
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:0.95rem;
+    letter-spacing:0.01em;
+    color:var(--yellow);
+    text-shadow:
+      0 0 6px rgba(255,210,63,0.9),
+      0 0 16px rgba(255,122,26,0.7),
+      0 0 30px rgba(255,122,26,0.4);
+    white-space:nowrap;
+    opacity:0;
+    animation: word-trail-fade 2.8s var(--ease) forwards;
+  }
+  @keyframes word-trail-fade{
+    0%{ opacity:0; filter:blur(0px); transform:translate(-50%,-50%) scale(1); }
+    12%{ opacity:1; }
+    55%{ opacity:1; filter:blur(0px); transform:translate(-50%,-52%) scale(1); }
+    100%{ opacity:0; filter:blur(4px); transform:translate(-50%,-66%) scale(0.85); }
+  }
+  @media (hover:none), (pointer:coarse){ .cursor-word{ display:none; } }
+  @media (prefers-reduced-motion: reduce){ .cursor-word{ display:none; } }
+
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+  section{ position:relative; }
+
+  /* ---------- nav ---------- */
+  header{
+    position:fixed; top:0; left:0; width:100%; z-index:500;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 32px; backdrop-filter: blur(8px);
+    background:linear-gradient(180deg, rgba(16,11,36,0.7), transparent);
+  }
+  .logo{ display:flex; align-items:center; gap:10px; font-family:'Space Grotesk', sans-serif; font-size:1.15rem; font-weight:700; letter-spacing:-0.01em; }
+  .logo .dot-a{ color:var(--pink); }
+  .logo-mark{ width:30px; height:30px; }
+  nav ul{ display:flex; gap:34px; list-style:none; }
+  nav a{ font-size:0.8rem; font-weight:600; letter-spacing:0.02em; opacity:0.8; position:relative; }
+  nav a::after{
+    content:""; position:absolute; left:0; bottom:-6px; width:0; height:2px; background:var(--yellow); border-radius:2px;
+    transition:width var(--dur-s) var(--ease);
+  }
+  nav a:hover::after{ width:100%; }
+  nav a:hover{ opacity:1; }
+  .nav-cta{
+    background:var(--yellow); color:var(--ink); padding:10px 20px; border-radius:100px; font-weight:700; font-size:0.78rem;
+  }
+
+  /* ---------- floating book mascot / logo (single instance, flies between landing spots) ---------- */
+  /* Position is fixed to the viewport at all times; JS recomputes ONE transform
+     (translate + scale + rotate) every scroll frame, so the book stays glued to the
+     scrollbar with no CSS-transition handoffs, jumps, or race conditions. */
+  #floatingBook{
+    position:fixed; top:0; left:0; z-index:850; width:92px; height:92px;
+    transform:translate(-50%,-50%); pointer-events:auto; cursor:pointer; will-change:transform;
+    filter:drop-shadow(0 8px 20px rgba(255,122,26,0.45));
+    transition:filter var(--dur-m) var(--ease);
+  }
+  #floatingBook.is-flying{ filter:drop-shadow(0 16px 34px rgba(255,122,26,0.65)); }
+  #floatingBook.just-landed{ animation: land-pop 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+  @keyframes land-pop{ 0%{ filter:drop-shadow(0 8px 20px rgba(255,122,26,0.45)); } 40%{ filter:drop-shadow(0 22px 46px rgba(255,122,26,0.75)); } 100%{ filter:drop-shadow(0 8px 20px rgba(255,122,26,0.45)); } }
+  #floatingBook svg{ width:100%; height:100%; animation: bob 3.2s ease-in-out infinite; display:block; }
+  #floatingBook.is-flying svg{ animation:none; }
+  @keyframes bob{ 0%,100%{ transform:translateY(0) rotate(-3deg); } 50%{ transform:translateY(-14px) rotate(3deg); } }
+  .book-page{ transform-origin:60px 55px; animation: flip 2.6s ease-in-out infinite; }
+  @keyframes flip{ 0%,100%{ transform:rotateY(0deg); } 50%{ transform:rotateY(35deg); } }
+
+  /* landing anchors: dormant until the book arrives, then wake up and stay gently "breathing"
+     for the rest of the visit — visually, the book hands its energy over to the circle (and
+     the whole section) the instant it lands. */
+  .book-landing-circle{ pointer-events:none; position:relative; }
+
+  .book-landing-circle::before{ /* faint dormant ring, hints where the book will land */
+    content:""; position:absolute; inset:0; border-radius:50%;
+    border:1px solid rgba(255,247,237,0.09);
+    transition:border-color 0.6s var(--ease);
+  }
+  .book-landing-circle::after{ /* the "energy" glow disc — invisible until awake */
+    content:""; position:absolute; inset:6%; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,210,63,0.55), rgba(255,122,26,0.26) 46%, transparent 72%);
+    opacity:0; transform:scale(0.7);
+    transition:opacity 0.7s var(--ease), transform 0.7s var(--ease);
+  }
+
+  .book-landing-circle.is-awake::before{
+    border-color:rgba(255,210,63,0.55);
+    animation: circle-ring-breathe 3.6s ease-in-out 0.9s infinite;
+  }
+  .book-landing-circle.is-awake::after{
+    opacity:1; transform:scale(1);
+    animation: circle-glow-breathe 3.6s ease-in-out 0.9s infinite;
+  }
+  @keyframes circle-ring-breathe{
+    0%,100%{ box-shadow:0 0 0 0 rgba(255,210,63,0); }
+    50%{ box-shadow:0 0 30px 7px rgba(255,210,63,0.22); }
+  }
+  @keyframes circle-glow-breathe{
+    0%,100%{ opacity:0.55; transform:scale(0.95); }
+    50%{ opacity:0.95; transform:scale(1.06); }
+  }
+
+  /* one-shot flash + expanding rings, spawned in JS the instant the circle wakes */
+  .circle-wake-flash{
+    position:absolute; left:50%; top:50%; width:60%; height:60%; margin:-30% 0 0 -30%;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(255,255,255,0.95), rgba(255,210,63,0.5) 55%, transparent 78%);
+    opacity:0.95; pointer-events:none;
+    animation: circle-wake-flash 0.7s ease-out forwards;
+  }
+  @keyframes circle-wake-flash{
+    0%{ opacity:0.95; transform:scale(0.3); }
+    100%{ opacity:0; transform:scale(2.1); }
+  }
+  .circle-wake-ring{
+    position:absolute; left:50%; top:50%; width:100%; height:100%; margin:-50% 0 0 -50%;
+    border-radius:50%;
+    border:2px solid rgba(255,210,63,0.75);
+    opacity:0.9; pointer-events:none;
+    animation: circle-wake-ring 1.15s cubic-bezier(.16,.8,.24,1) forwards;
+  }
+  @keyframes circle-wake-ring{
+    0%{ opacity:0.9; transform:scale(0.35); }
+    100%{ opacity:0; transform:scale(2.4); }
+  }
+
+  /* ---------- hover-to-reveal text ---------- */
+  .hover-text{
+    opacity:0.22; filter:blur(3px); transform:translateY(3px);
+    transition:opacity 0.55s var(--ease), filter 0.55s var(--ease), transform 0.55s var(--ease), color 0.55s var(--ease);
+    cursor:default;
+  }
+  .hover-text:hover, .hover-text.force-visible{
+    opacity:1; filter:blur(0); transform:translateY(0);
+  }
+  @media (hover:none), (pointer:coarse){ .hover-text{ opacity:1; filter:blur(0); transform:translateY(0); } }
+  @media (prefers-reduced-motion: reduce){ .hover-text{ opacity:1; filter:blur(0); transform:translateY(0); } }
+
+  /* ---------- notice board (Meet the Teacher) ---------- */
+  .notice-board{
+    position:relative; padding:36px 30px 30px;
+  }
+  .notice-board::before{
+    content:""; position:absolute; inset:-14px -10px; border-radius:26px; z-index:-1;
+    background:
+      radial-gradient(circle at 1px 1px, rgba(251,247,255,0.07) 1.4px, transparent 0) 0 0/16px 16px,
+      linear-gradient(160deg, var(--ink-2), #140c2c 80%);
+    border:1px solid var(--line);
+    box-shadow: inset 0 0 60px rgba(0,0,0,0.35);
+  }
+  .note-card{
+    position:relative; background:var(--paper); color:var(--ink); border-radius:8px;
+    padding:22px 24px; margin-bottom:24px; transform:rotate(var(--rot,-2deg));
+    box-shadow:0 16px 30px rgba(0,0,0,0.4);
+    transition:transform var(--dur-m) var(--ease), box-shadow var(--dur-m) var(--ease);
+  }
+  .note-card:last-child{ margin-bottom:0; }
+  .note-card:hover{ transform:rotate(0deg) translateY(-6px) scale(1.015); box-shadow:0 26px 44px rgba(0,0,0,0.5); z-index:2; }
+  .note-card .pin{
+    position:absolute; top:-11px; left:50%; transform:translateX(-50%);
+    width:18px; height:18px; border-radius:50%;
+    background:radial-gradient(circle at 32% 30%, #fff, var(--pink) 55%, #7a1f42 100%);
+    box-shadow:0 4px 8px rgba(0,0,0,0.45);
+  }
+  .note-card.tag-note .pin{ background:radial-gradient(circle at 32% 30%, #fff, var(--yellow) 55%, #8a6a00 100%); }
+  .note-card.photo-note .pin{ background:radial-gradient(circle at 32% 30%, #fff, var(--green) 55%, #12684a 100%); }
+  .note-tape{
+    position:absolute; top:-10px; width:60px; height:22px; background:rgba(255,210,63,0.55);
+    box-shadow:0 2px 4px rgba(0,0,0,0.25);
+  }
+  .note-tape.left{ left:14px; transform:rotate(-8deg); }
+  .note-tape.right{ right:14px; transform:rotate(7deg); }
+  .note-card .tag-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  .note-card .tag-row div{
+    padding:8px 18px; border-radius:50px; font-family:'Space Grotesk', sans-serif;
+    font-weight:700; font-size:1rem; color:#fff;
+  }
+  .note-card.photo-note{ text-align:center; }
+  .note-card.bio-note p{ color:rgba(16,11,36,0.72); line-height:1.7; font-size:0.98rem; }
+  .note-card .card-label{
+    font-family:'JetBrains Mono', monospace; font-size:0.66rem; letter-spacing:0.12em; text-transform:uppercase;
+    color:rgba(16,11,36,0.45); font-weight:600; display:block; margin-bottom:6px;
+  }
+
+  /* ---------- meet the teacher: colored block stack ---------- */
+  .meet-grid{
+    display:grid; grid-template-columns:1fr; gap:20px;
+  }
+  .meet-block{
+    border-radius:28px; padding:32px 30px; position:relative; overflow:hidden;
+    transition:transform var(--dur-s) var(--ease), box-shadow var(--dur-s) var(--ease);
+  }
+  .meet-block:hover{ transform:translateY(-6px); box-shadow:0 22px 40px rgba(0,0,0,0.35); }
+  .meet-label{
+    font-family:'JetBrains Mono', monospace; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase;
+    font-weight:600; opacity:0.65; display:block; margin-bottom:10px;
+  }
+  .block-yellow{ background:var(--yellow); color:var(--ink); }
+  .block-yellow h2{ font-size:clamp(1.8rem, 3vw, 2.4rem); }
+  .block-photo{
+    position:relative; background:var(--ink-2); border:1px solid var(--line);
+    display:flex; align-items:stretch; justify-content:stretch; padding:14px;
+  }
+  /* small trigger sitting on the photo card — adds no height to the column, so it can never
+     shift the floating book's landing position in this section */
+  .watch-intro-btn{
+    position:absolute; left:14px; bottom:14px; z-index:2;
+    display:flex; align-items:center; gap:8px;
+    background:rgba(10,10,10,0.72); backdrop-filter:blur(4px);
+    border:1px solid rgba(255,247,237,0.25); color:var(--paper);
+    padding:9px 16px; border-radius:100px; font-size:0.7rem; letter-spacing:0.06em;
+    text-transform:uppercase; cursor:pointer;
+    transition:background var(--dur-s) var(--ease), transform var(--dur-s) var(--ease);
+  }
+  .watch-intro-btn:hover{ background:rgba(10,10,10,0.9); transform:translateY(-2px); }
+  .watch-intro-icon{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:20px; height:20px; border-radius:50%; background:var(--yellow); color:var(--ink); font-size:0.6rem;
+  }
+
+  /* video lightbox overlay: fixed to the viewport, completely outside document flow */
+  .video-lightbox{
+    position:fixed; inset:0; z-index:2000; display:none;
+    align-items:center; justify-content:center; padding:24px;
+    background:rgba(6,4,14,0.86); backdrop-filter:blur(6px);
+  }
+  .video-lightbox.is-open{ display:flex; }
+  .video-lightbox-inner{
+    position:relative; width:min(720px, 100%);
+  }
+  .video-lightbox-close{
+    position:absolute; top:-44px; right:0; width:34px; height:34px; border-radius:50%;
+    background:var(--paper); color:var(--ink); border:none; font-size:0.9rem; cursor:pointer;
+  }
+  .video-frame{
+    position:relative; width:100%; aspect-ratio:16/9; border-radius:20px;
+    overflow:hidden; background:#000;
+  }
+  .video-frame video{
+    width:100%; height:100%; display:block; object-fit:cover; border-radius:20px;
+  }
+  .video-fallback{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:12px; text-align:center; padding:24px;
+    color:var(--paper-dim); background:linear-gradient(160deg, var(--ink-2), #140c2c 80%);
+  }
+  .video-fallback-icon{
+    width:46px; height:46px; border-radius:50%; background:var(--yellow); color:var(--ink);
+    display:flex; align-items:center; justify-content:center; font-size:1.1rem;
+  }
+  .video-fallback span.mono{
+    font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; opacity:0.85;
+  }
+
+  /* ---------- music toggle ---------- */
+  #musicToggle{
+    position:fixed; bottom:28px; right:28px; z-index:500; width:54px; height:54px; border-radius:50%;
+    background:var(--ink-2); border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:border-color var(--dur-s) var(--ease), transform var(--dur-s) var(--ease);
+  }
+  #musicToggle:hover{ border-color:var(--yellow); transform:scale(1.08); }
+  #musicToggle svg{ width:22px; height:22px; }
+  #musicToggle.is-loading{ opacity:0.5; pointer-events:none; }
+  .eq-bar{ fill:var(--yellow); }
+  .eq-bar.playing{ animation: eq 0.9s ease-in-out infinite; }
+  .eq-bar:nth-child(2).playing{ animation-delay:0.15s; }
+  .eq-bar:nth-child(3).playing{ animation-delay:0.3s; }
+  @keyframes eq{ 0%,100%{ transform:scaleY(0.4); } 50%{ transform:scaleY(1); } }
+
+  /* ---------- hero: pinned "opening box" sequence ---------- */
+  .hero-pin{ height:230vh; position:relative; }
+  .hero-sticky{
+    position:sticky; top:0; height:100svh; overflow:hidden;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--ink);
+  }
+  .box-panel{
+    position:absolute; top:0; height:100%; width:50%; z-index:10;
+    display:flex; align-items:center; will-change:transform;
+  }
+  .box-left{ left:0; justify-content:flex-end; padding-right:6vw;
+    background:linear-gradient(135deg, var(--violet), #7A2E00 70%); }
+  .box-right{ right:0; justify-content:flex-start; padding-left:6vw;
+    background:linear-gradient(225deg, var(--pink), #7A1010 70%); }
+  .box-panel .word{
+    font-family:'Space Grotesk', sans-serif; font-weight:700; color:var(--paper);
+    font-size:clamp(2rem, 6vw, 4.4rem); letter-spacing:-0.02em; white-space:nowrap;
+  }
+  .hero{
+    position:relative; z-index:1; text-align:center; padding:0 24px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    opacity:0; transform:translateY(16px);
+    transition:opacity 0.5s var(--ease), transform 0.5s var(--ease);
+  }
+  .hero-content{ position:relative; z-index:1; text-align:center; padding:0 24px; }
+  .eyebrow{
+    font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:0.22em; color:var(--yellow);
+    display:inline-flex; align-items:center; gap:8px; margin-bottom:22px; opacity:0;
+    animation: rise var(--dur-m) var(--ease) 0.2s forwards;
+    background:rgba(255,210,63,0.1); padding:8px 16px; border-radius:100px;
+  }
+  .hero h1{
+    font-size:clamp(2.8rem, 8vw, 6.4rem); line-height:1.02; letter-spacing:-0.02em;
+    opacity:0; animation: rise var(--dur-l) var(--ease) 0.4s forwards;
+  }
+  .hero h1 .grad{
+    background:linear-gradient(100deg, var(--violet), var(--pink) 55%, var(--yellow));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p.sub{
+    max-width:520px; margin:26px auto 0; color:var(--paper-dim); font-size:1.05rem; line-height:1.6; font-weight:500;
+    opacity:0; animation: rise var(--dur-m) var(--ease) 0.75s forwards;
+  }
+  @keyframes rise{ from{ opacity:0; transform:translateY(22px); } to{ opacity:1; transform:translateY(0); } }
+
+  .hero-ctas{ display:flex; gap:16px; justify-content:center; margin-top:38px; flex-wrap:wrap;
+    opacity:0; animation: rise var(--dur-m) var(--ease) 1s forwards; }
+  .btn-primary{
+    background:linear-gradient(100deg, var(--pink), var(--violet));
+    color:var(--paper); padding:16px 30px; border-radius:100px; font-weight:700; font-size:0.92rem;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-ghost{
+    border:1.5px solid var(--paper-dim); color:var(--paper); padding:16px 30px; border-radius:100px; font-weight:700; font-size:0.92rem;
+  }
+
+  .scroll-cue{
+    position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:10px; z-index:30;
+    opacity:0; animation: rise var(--dur-m) var(--ease) 1.3s forwards;
+    transition:opacity 0.3s var(--ease);
+  }
+  .scroll-cue .line{ width:1px; height:44px; background:linear-gradient(var(--yellow), transparent); animation: pulse-line 2s ease-in-out infinite; }
+  @keyframes pulse-line{ 0%,100%{ opacity:0.4; } 50%{ opacity:1; } }
+  .scroll-cue span{ font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--paper-dim); font-weight:600; }
+
+  /* ---------- hero layout ---------- */
+  .hero-grid{
+    width:100%; max-width:760px; margin:0 auto;
+    display:grid; grid-template-columns:1fr; align-items:center; gap:40px;
+  }
+  .game-circle{
+    position:relative; width:320px; height:320px; max-width:88vw; max-height:88vw;
+    border-radius:50%; flex-shrink:0;
+    background:
+      radial-gradient(circle at 1px 1px, rgba(251,247,255,0.06) 1.4px, transparent 0) 0 0/14px 14px,
+      radial-gradient(circle at 35% 25%, rgba(255,122,26,0.16), transparent 55%),
+      var(--ink-2);
+    border:1px solid var(--line);
+    box-shadow:0 20px 50px rgba(0,0,0,0.45), inset 0 0 50px rgba(0,0,0,0.35);
+    overflow:visible;
+  }
+  .game-track{ position:absolute; inset:0; width:100%; height:100%; }
+  .game-track path.track-base{ fill:none; stroke:rgba(255,247,237,0.16); stroke-width:3; stroke-linecap:round; stroke-dasharray:2 10; }
+  .game-track path.track-progress{ fill:none; stroke:var(--yellow); stroke-width:3.4; stroke-linecap:round; filter:drop-shadow(0 0 6px rgba(255,210,63,0.7)); transition:stroke-dashoffset 0.6s var(--ease); }
+
+  .grade-marker{
+    position:absolute; transform:translate(-50%,-50%);
+    width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:0.8rem;
+    background:var(--ink); border:2px solid var(--paper-dim); color:var(--paper-dim);
+    transition:transform var(--dur-s) var(--ease), border-color var(--dur-s) var(--ease), color var(--dur-s) var(--ease), box-shadow var(--dur-s) var(--ease), background var(--dur-s) var(--ease);
+    z-index:2;
+  }
+  .grade-marker[data-grade="A*"]{ width:40px; height:40px; font-size:0.85rem; }
+  .grade-marker.is-passed{
+    border-color:var(--yellow); color:var(--ink); background:linear-gradient(135deg, var(--yellow), var(--violet));
+    box-shadow:0 0 16px rgba(255,210,63,0.7); transform:translate(-50%,-50%) scale(1.18);
+  }
+  .grade-marker[data-grade="A*"].is-passed{
+    background:linear-gradient(135deg, var(--yellow), var(--pink));
+    box-shadow:0 0 26px rgba(255,210,63,0.9), 0 0 40px rgba(229,56,59,0.5);
+  }
+
+  .game-character{
+    position:absolute; width:46px; height:52px; transform:translate(-50%,-78%);
+    cursor:pointer; z-index:4; transition:left 0.6s var(--ease), top 0.6s var(--ease);
+    animation: char-idle 1.8s ease-in-out infinite;
+    touch-action:manipulation; -webkit-tap-highlight-color:transparent;
+  }
+  .game-character svg{ width:100%; height:100%; display:block; filter:drop-shadow(0 6px 10px rgba(0,0,0,0.4)); }
+  @keyframes char-idle{ 0%,100%{ transform:translate(-50%,-78%) rotate(-3deg); } 50%{ transform:translate(-50%,-84%) rotate(3deg); } }
+  .game-character.char-hop{ animation: char-hop 0.6s var(--ease); }
+  @keyframes char-hop{
+    0%{ transform:translate(-50%,-78%) scale(1) rotate(0deg); }
+    40%{ transform:translate(-50%,-104%) scale(1.08) rotate(-8deg); }
+    100%{ transform:translate(-50%,-78%) scale(1) rotate(0deg); }
+  }
+
+  .game-book-mascot{
+    position:absolute; left:50%; top:6%; width:52px; height:52px; transform:translate(-50%,-50%) scale(0.82);
+    opacity:0.55; z-index:3; pointer-events:none;
+    transition:opacity var(--dur-m) var(--ease);
+  }
+  .game-book-mascot svg{ width:100%; height:100%; display:block; }
+  .game-book-mascot.is-swirling{ opacity:1; animation: book-swirl 1.1s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes book-swirl{
+    0%{ transform:translate(-50%,-50%) scale(0.82) rotate(0deg); filter:drop-shadow(0 0 0 rgba(255,210,63,0)); }
+    45%{ transform:translate(-50%,-50%) scale(1.35) rotate(220deg); filter:drop-shadow(0 0 22px rgba(255,210,63,0.85)); }
+    75%{ transform:translate(-50%,-50%) scale(0.95) rotate(380deg); }
+    100%{ transform:translate(-50%,-50%) scale(1.12) rotate(360deg); filter:drop-shadow(0 0 14px rgba(255,210,63,0.6)); }
+  }
+  .mascot-sparkles{ position:absolute; inset:0; pointer-events:none; }
+  .mascot-spark{
+    position:absolute; width:6px; height:6px; margin:-3px; border-radius:2px;
+    background:linear-gradient(135deg, var(--yellow), var(--pink));
+    animation: spark-burst 0.85s ease-out forwards;
+  }
+  @keyframes spark-burst{
+    0%{ opacity:1; transform:translate(0,0) rotate(0deg) scale(1); }
+    100%{ opacity:0; transform:translate(var(--sx,0px), var(--sy,0px)) rotate(200deg) scale(0.3); }
+  }
+
+  .game-hint{
+    position:absolute; bottom:-6px; left:50%; transform:translateX(-50%);
+    font-size:0.66rem; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--paper-dim); white-space:nowrap; opacity:0.75;
+    animation: pulse-line 2s ease-in-out infinite;
+    transition:opacity var(--dur-s) var(--ease);
+  }
+  .game-hint.is-hidden{ opacity:0; }
+
+  /* ---------- magic flake burst when the hero "door" (box lid) opens ---------- */
+  .door-flake{
+    position:absolute; top:0; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff, rgba(255,255,255,0.35) 70%, transparent);
+    box-shadow:0 0 6px rgba(255,255,255,0.85);
+    opacity:0; z-index:40; pointer-events:none;
+    animation-name: flake-fall; animation-timing-function:ease-out; animation-fill-mode:forwards;
+  }
+  @keyframes flake-fall{
+    0%{ opacity:0; transform:translate(0,0) rotate(0deg) scale(0.5); }
+    12%{ opacity:1; }
+    100%{ opacity:0; transform:translate(var(--fx,0px), 120px) rotate(240deg) scale(1); }
+  }
+
+  /* ---------- reveal utility ---------- */
+  .reveal{ opacity:0; transform:translateY(36px); transition:opacity 1s var(--ease), transform 1s var(--ease); }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+  /* extra "breath of life" pulse layered onto a section's content the moment it wakes,
+     staggered element-by-element so it reads as energy spreading through the section */
+  .wake-breathe{ animation: wake-breathe 1.3s var(--ease) both; }
+  @keyframes wake-breathe{
+    0%{ filter:brightness(1); transform:scale(1); }
+    35%{ filter:brightness(1.22); transform:scale(1.03); }
+    100%{ filter:brightness(1); transform:scale(1); }
+  }
+
+  /* a couple of small, themed illustrations that drift down through a section the moment
+     it wakes — kept to two per landing so it stays a light touch, not confetti overload */
+  .fall-item{
+    position:absolute; top:-46px; z-index:3; pointer-events:none;
+    font-size:1.7rem; line-height:1; will-change:transform, opacity;
+    filter:drop-shadow(0 6px 10px rgba(0,0,0,0.35));
+    animation: fall-drop var(--fall-dur, 2.8s) cubic-bezier(.4,.1,.65,1) forwards;
+  }
+  @keyframes fall-drop{
+    0%{ transform:translateY(0) rotate(0deg); opacity:0; }
+    10%{ opacity:1; }
+    82%{ opacity:1; }
+    100%{ transform:translateY(460px) rotate(var(--fall-rot, 20deg)); opacity:0; }
+  }
+
+  .section-head{ padding:120px 0 60px; }
+  .section-head .eyebrow{ animation:none; opacity:1; }
+  .section-head h2{ font-size:clamp(2rem, 4.4vw, 3rem); max-width:640px; }
+  .section-head p{ color:var(--paper-dim); max-width:460px; margin-top:18px; line-height:1.6; font-weight:500; }
+
+  /* ---------- subject cards ---------- */
+  .collection{ padding-bottom:140px; }
+  .card-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+  .card{
+    position:relative; border:1px solid var(--line); border-radius:20px; padding:34px 28px 30px;
+    background:var(--ink-2);
+    transform-style:preserve-3d; transition:border-color var(--dur-s) var(--ease), transform 0.15s ease-out;
+    will-change:transform; overflow:hidden;
+  }
+  .card::before{
+    content:""; position:absolute; top:-40%; left:-20%; width:180%; height:180%;
+    background:radial-gradient(circle, var(--card-glow, var(--violet)) 0%, transparent 60%);
+    opacity:0.15; transition:opacity var(--dur-s) var(--ease); pointer-events:none;
+  }
+  .card:hover{ border-color:var(--card-glow, var(--violet)); }
+  .card:hover::before{ opacity:0.28; }
+  .card .icon-wrap{ width:56px; height:56px; border-radius:16px; display:flex; align-items:center; justify-content:center; margin-bottom:22px; background:var(--card-glow, var(--violet)); }
+  .card .tag{ font-size:0.68rem; font-weight:700; color:var(--card-glow, var(--violet)); text-transform:uppercase; letter-spacing:0.08em; }
+  .card h3{ font-size:1.4rem; margin:10px 0 8px; }
+  .card p{ color:var(--paper-dim); font-size:0.9rem; line-height:1.55; }
+  .card .foot{ margin-top:22px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--line); padding-top:16px; }
+  .card .foot .lvl{ font-family:'JetBrains Mono', monospace; font-size:0.75rem; color:var(--paper-dim); }
+  .card .foot .view{ font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--card-glow, var(--violet)); }
+  .card .foot .view::after{ content:"→"; margin-left:6px; transition:margin var(--dur-s) var(--ease); }
+  .card:hover .foot .view::after{ margin-left:12px; }
+
+  /* ---------- process ---------- */
+  .process{ padding:60px 0 140px; }
+  .process-list{ position:relative; border-left:1px solid var(--line); margin-left:8px; }
+  .process-item{ position:relative; padding:38px 0 38px 48px; }
+  .process-item::before{
+    content:""; position:absolute; left:-5px; top:44px; width:9px; height:9px; border-radius:50%;
+    background:var(--ink); border:2px solid var(--yellow);
+  }
+  .process-item .num{ font-family:'JetBrains Mono', monospace; color:var(--yellow); font-weight:600; font-size:0.78rem; display:block; margin-bottom:10px; }
+  .process-item h3{ font-size:1.4rem; margin-bottom:8px; }
+  .process-item p{ color:var(--paper-dim); max-width:520px; line-height:1.6; font-size:0.92rem; }
+
+  /* ---------- why band ---------- */
+  .craft{ padding:0 0 140px; overflow:hidden; }
+  .craft-inner{ display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+  .craft-visual{ position:relative; height:380px; display:flex; align-items:center; justify-content:center; }
+  .craft-text p{ color:var(--paper-dim); line-height:1.7; margin-top:18px; max-width:440px; font-weight:500; }
+  .craft-text .stat-row{ display:flex; gap:36px; margin-top:36px; flex-wrap:wrap; }
+  .craft-text .stat b{ display:block; font-family:'Space Grotesk', sans-serif; font-size:2.1rem; background:linear-gradient(100deg, var(--pink), var(--yellow)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .craft-text .stat span{ font-size:0.72rem; color:var(--paper-dim); text-transform:uppercase; letter-spacing:0.06em; font-weight:600; }
+
+  /* ---------- cta ---------- */
+  .cta{ padding:140px 0; text-align:center; border-top:1px solid var(--line); }
+  .cta h2{ font-size:clamp(2rem, 5.6vw, 4.2rem); max-width:820px; margin:0 auto 34px; line-height:1.08; }
+  .cta h2 .grad{ background:linear-gradient(100deg, var(--violet), var(--pink) 55%, var(--yellow)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .magnetic-btn{
+    display:inline-flex; align-items:center; gap:12px; padding:18px 36px;
+    background:linear-gradient(100deg, var(--pink), var(--violet)); color:var(--paper);
+    border-radius:100px; font-size:0.85rem; font-weight:700; letter-spacing:0.02em;
+    position:relative;
+  }
+  .socials{ display:flex; gap:18px; justify-content:center; margin-top:44px; flex-wrap:wrap; }
+  .cta-game-col{ display:flex; align-items:center; justify-content:center; margin-top:28px; }
+  .socials a{
+    display:flex; align-items:center; gap:8px; padding:10px 18px; border:1px solid var(--line); border-radius:100px;
+    font-size:0.78rem; font-weight:600; transition: border-color var(--dur-s) var(--ease), color var(--dur-s) var(--ease);
+  }
+  .socials a:hover{ border-color:var(--yellow); color:var(--yellow); }
+
+  footer{ padding:36px 0; border-top:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+  footer .mono{ font-size:0.7rem; color:var(--paper-dim); }
+
+  /* ---------- two-column layout sections (Meet the Teacher / Levels) ---------- */
+  .split-section{ position:relative; padding:120px 0; background:var(--ink); transition:background-color 1.6s var(--ease); }
+  .split-section.bg-2{ background:var(--ink-2); }
+  /* "Meet the Teacher" gets its own slightly-lighter resting shade so it visibly differs
+     from the sections above/below it, even before the book arrives */
+  #meet.split-section{ background:#141311; }
+  /* section "wakes up" — background warms and a stronger electric glow blooms through
+     the whole section the moment the book lands inside it */
+  .split-section::before{
+    content:""; position:absolute; inset:0; z-index:0; pointer-events:none;
+    background:radial-gradient(ellipse 90% 85% at 24% 48%, rgba(255,122,26,0.22), rgba(255,210,63,0.1) 48%, transparent 78%);
+    opacity:0; transition:opacity 1.6s var(--ease);
+  }
+  .split-section.is-awake::before{ opacity:1; }
+  #meet.split-section.is-awake{ background:#221a0c; }
+  .split-section.bg-2.is-awake{ background:#241b0d; }
+  .split-section .wrap{ position:relative; z-index:2; }
+  .split-grid{ display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+  .book-circle{ margin:0 auto; }
+  .book-circle-lg{ width:260px; height:260px; }
+  .book-circle-md{ width:220px; height:220px; }
+
+  /* ---------- energy pipe: connects the landing circle to the photo/video frame ---------- */
+  .energy-pipe{ position:absolute; inset:0; z-index:1; pointer-events:none; overflow:visible; }
+  .energy-pipe-base{
+    fill:none; stroke:rgba(255,247,237,0.09); stroke-width:3; stroke-linecap:round;
+  }
+  .energy-pipe-flow{
+    fill:none; stroke:#FFD23F; stroke-width:4; stroke-linecap:round;
+    filter:drop-shadow(0 0 7px rgba(255,180,60,0.75));
+    stroke-dasharray:16 22;
+    opacity:0;
+    transition:opacity 0.4s var(--ease);
+  }
+  .split-section.is-awake .energy-pipe-flow{
+    opacity:1;
+    animation:pipe-flow 0.85s linear infinite;
+  }
+  @keyframes pipe-flow{ to{ stroke-dashoffset:-76; } }
+
+  /* the frame itself gradually powers up once the travelling energy reaches it */
+  .block-photo{ transition:box-shadow 1.2s var(--ease), border-color 1.2s var(--ease); }
+  .block-photo::after{
+    content:""; position:absolute; inset:0; border-radius:28px; pointer-events:none;
+    background:linear-gradient(135deg, rgba(255,122,26,0.5), rgba(255,210,63,0.35));
+    mix-blend-mode:overlay; opacity:0;
+    transition:opacity 1.3s var(--ease);
+  }
+  .block-photo.frame-energized{
+    border-color:rgba(255,201,64,0.6);
+    box-shadow:0 0 0 1px rgba(255,201,64,0.25), 0 24px 60px rgba(255,140,26,0.35);
+  }
+  .block-photo.frame-energized::after{ opacity:0.55; }
+
+  /* ---------- cinematic tilted "screen" for the intro-video teaser ---------- */
+  .block-photo{ perspective:1600px; }
+  .cine-stage{ position:relative; width:100%; height:100%; min-height:200px; transform-style:preserve-3d; }
+  .cine-glow{
+    position:absolute; inset:-14% -6% -14% 16%; z-index:0; pointer-events:none;
+    background:radial-gradient(ellipse 68% 62% at 28% 50%, rgba(255,122,26,0.4), transparent 72%);
+    filter:blur(28px); opacity:0.55;
+    transition:opacity 1.2s var(--ease);
+  }
+  .block-photo.frame-energized .cine-glow{ opacity:1; }
+  .cine-screen{
+    position:relative; z-index:1; width:100%; height:100%; min-height:200px; border-radius:20px;
+    overflow:hidden; transform-origin:78% 50%;
+    transform: rotateY(-16deg) rotateX(4deg) rotateZ(0.6deg);
+    box-shadow:
+      -36px 30px 54px rgba(0,0,0,0.55),
+      0 0 0 1px rgba(255,247,237,0.08);
+    transition: transform 1s var(--ease), filter 1.3s var(--ease), box-shadow 1s var(--ease);
+  }
+  .block-photo:hover .cine-screen{
+    transform: rotateY(-8deg) rotateX(2deg) rotateZ(0.2deg) scale(1.015);
+  }
+  .block-photo.frame-energized #teacherPhoto{ filter:saturate(1.25) brightness(1.08); }
+  .cine-bar{ position:absolute; left:0; right:0; height:8%; background:#000; z-index:2; pointer-events:none; }
+  .cine-bar-top{ top:0; }
+  .cine-bar-bottom{ bottom:0; }
+  .cine-sheen{
+    position:absolute; top:0; left:-60%; width:35%; height:100%; z-index:3; pointer-events:none;
+    background:linear-gradient(75deg, transparent, rgba(255,255,255,0.14), transparent);
+    transform:skewX(-18deg);
+    animation: cine-sheen-sweep 6s ease-in-out infinite;
+  }
+  @keyframes cine-sheen-sweep{ 0%, 62%{ left:-60%; } 100%{ left:130%; } }
+
+  .cine-coming-soon{
+    position:absolute; left:50%; bottom:14px; transform:translateX(-50%); z-index:4;
+    display:inline-flex; align-items:center; gap:9px;
+    padding:9px 16px; border-radius:999px;
+    background:rgba(10,10,10,0.62); backdrop-filter:blur(6px);
+    border:1px solid rgba(255,210,63,0.4);
+    font-size:0.72rem; letter-spacing:0.05em; color:var(--yellow);
+    white-space:nowrap; pointer-events:none;
+    animation: cine-badge-pulse 2.6s ease-in-out infinite;
+  }
+  .cine-coming-soon-dot{
+    width:7px; height:7px; border-radius:50%; background:var(--yellow); flex-shrink:0;
+    box-shadow:0 0 8px 2px rgba(255,210,63,0.6);
+    animation: cine-dot-blink 1.4s ease-in-out infinite;
+  }
+  @keyframes cine-badge-pulse{
+    0%, 100%{ box-shadow:0 0 0 0 rgba(255,210,63,0.28); }
+    50%{ box-shadow:0 0 0 8px rgba(255,210,63,0); }
+  }
+  @keyframes cine-dot-blink{ 0%, 100%{ opacity:1; } 50%{ opacity:0.35; } }
+
+  /* ---------- Choose Your Future: dual timeline section ---------- */
+  .book-circle-sm{ width:130px; height:130px; }
+  .future-section{ overflow:hidden; }
+  .future-head{ text-align:center; max-width:620px; margin:0 auto 76px; display:flex; flex-direction:column; align-items:center; }
+  .future-head h2{ font-size:clamp(2rem, 4.4vw, 3rem); margin-top:6px; }
+  .future-head p{ color:var(--paper-dim); margin-top:16px; line-height:1.6; font-weight:500; }
+
+  .future-columns{ display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; }
+  .future-col-title{
+    width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px;
+    font-size:1.5rem; font-family:'Space Grotesk', sans-serif; font-weight:700; color:inherit;
+    background:none; border:none; border-bottom:1px solid var(--line);
+    padding:4px 2px 18px; text-align:left; cursor:pointer;
+    transition: border-color 0.4s var(--ease), opacity 0.3s var(--ease);
+  }
+  .future-col-title:hover{ opacity:0.85; }
+  .future-col-plus{ width:20px; height:20px; margin-top:0; flex-shrink:0; }
+  .future-col.is-open .future-col-plus::after{ transform:translateX(-50%) rotate(90deg); }
+  .future-col.is-open .future-col-title{ border-color:rgba(255,210,63,0.5); }
+  .future-col[data-subject="accountancy"].is-open .future-col-title{ border-color:rgba(229,56,59,0.5); }
+  .future-col[data-subject="business"] .future-col-title{ color:var(--yellow); }
+  .future-col[data-subject="accountancy"] .future-col-title{ color:var(--pink); }
+
+  .future-col-body{ display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.6s var(--ease); }
+  .future-col.is-open .future-col-body{ grid-template-rows:1fr; }
+  .future-col-body-inner{ overflow:hidden; min-height:0; }
+  .future-col-body-inner .timeline{ padding-top:34px; }
+
+  .timeline{ position:relative; list-style:none; }
+  .timeline::before{
+    content:""; position:absolute; left:26px; top:8px; bottom:8px; width:2px;
+    background:linear-gradient(180deg, rgba(255,210,63,0.55), rgba(255,210,63,0.05));
+  }
+  .future-col[data-subject="accountancy"] .timeline::before{
+    background:linear-gradient(180deg, rgba(229,56,59,0.55), rgba(229,56,59,0.05));
+  }
+
+  .timeline-item{
+    position:relative; display:flex; gap:20px; padding-bottom:26px;
+    opacity:0; transform:translateY(18px);
+    transition:opacity 0.5s var(--ease), transform 0.5s var(--ease);
+  }
+  .future-col.is-open .timeline-item{ opacity:1; transform:translateY(0); }
+  .timeline-item:last-child{ padding-bottom:0; }
+
+  .timeline-node{
+    position:relative; z-index:1; flex-shrink:0;
+    width:52px; height:52px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:1.25rem;
+    background:radial-gradient(circle at 32% 30%, rgba(255,255,255,0.12), rgba(255,122,26,0.18) 55%, transparent 78%);
+    border:1px solid rgba(255,247,237,0.16);
+    box-shadow:0 0 0 0 rgba(255,210,63,0);
+    transition: box-shadow 0.5s var(--ease), border-color 0.5s var(--ease), transform 0.5s var(--ease);
+    animation: node-float 4.4s ease-in-out infinite;
+  }
+  .timeline-item:nth-child(even) .timeline-node{ animation-delay:0.5s; }
+  @keyframes node-float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
+
+  .timeline-item.is-open .timeline-node{
+    border-color:var(--yellow); box-shadow:0 0 22px 5px rgba(255,210,63,0.4); transform:scale(1.08);
+  }
+  .future-col[data-subject="accountancy"] .timeline-item.is-open .timeline-node{
+    border-color:var(--pink); box-shadow:0 0 22px 5px rgba(229,56,59,0.4);
+  }
+
+  .timeline-body{ flex:1; min-width:0; }
+  .timeline-header{
+    width:100%; display:flex; align-items:flex-start; justify-content:space-between; gap:16px;
+    text-align:left; padding:15px 18px; border-radius:16px; font:inherit; color:inherit;
+    border:1px solid var(--line); background:rgba(255,247,237,0.02); cursor:pointer;
+    transition: border-color 0.4s var(--ease), background 0.4s var(--ease), transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
+  }
+  .timeline-header:hover{ transform:translateY(-3px); border-color:rgba(255,210,63,0.35); }
+  .future-col[data-subject="accountancy"] .timeline-header:hover{ border-color:rgba(229,56,59,0.35); }
+  .timeline-item.is-open .timeline-header{
+    border-color:rgba(255,210,63,0.5); background:rgba(255,210,63,0.06); box-shadow:0 14px 32px rgba(255,122,26,0.16);
+  }
+  .future-col[data-subject="accountancy"] .timeline-item.is-open .timeline-header{
+    border-color:rgba(229,56,59,0.5); background:rgba(229,56,59,0.06); box-shadow:0 14px 32px rgba(229,56,59,0.16);
+  }
+  .timeline-title{ display:block; font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:1.02rem; }
+  .timeline-subtitle{ display:block; margin-top:5px; font-size:0.85rem; color:var(--paper-dim); line-height:1.5; font-weight:500; }
+
+  .plus-icon{ position:relative; width:18px; height:18px; flex-shrink:0; margin-top:5px; }
+  .plus-icon::before, .plus-icon::after{ content:""; position:absolute; background:var(--yellow); border-radius:2px; transition:transform 0.45s var(--ease); }
+  .plus-icon::before{ left:0; top:50%; width:100%; height:2px; transform:translateY(-50%); }
+  .plus-icon::after{ top:0; left:50%; width:2px; height:100%; transform:translateX(-50%); }
+  .timeline-item.is-open .plus-icon::after{ transform:translateX(-50%) rotate(90deg); }
+  .future-col[data-subject="accountancy"] .plus-icon::before,
+  .future-col[data-subject="accountancy"] .plus-icon::after{ background:var(--pink); }
+
+  .timeline-panel-wrap{ display:grid; grid-template-rows:0fr; transition:grid-template-rows 0.5s var(--ease); }
+  .timeline-item.is-open .timeline-panel-wrap{ grid-template-rows:1fr; }
+  .timeline-panel{ overflow:hidden; min-height:0; }
+  .timeline-panel-inner{
+    padding:20px 18px 4px; opacity:0; transform:translateY(-6px);
+    transition:opacity 0.4s var(--ease) 0.05s, transform 0.4s var(--ease) 0.05s;
+  }
+  .timeline-item.is-open .timeline-panel-inner{ opacity:1; transform:translateY(0); }
+  .timeline-panel-inner p{ color:var(--paper-dim); line-height:1.7; font-size:0.92rem; margin-bottom:14px; }
+  .timeline-panel-inner ul{ list-style:none; display:grid; gap:9px; margin-bottom:14px; }
+  .timeline-panel-inner li{ font-size:0.88rem; color:var(--paper); line-height:1.5; padding-left:20px; position:relative; }
+  .timeline-panel-inner li::before{ content:"→"; position:absolute; left:0; color:var(--yellow); font-weight:700; }
+  .future-col[data-subject="accountancy"] .timeline-panel-inner li::before{ color:var(--pink); }
+  .timeline-panel-inner .note{
+    font-size:0.86rem; font-style:italic; color:var(--paper); border-left:2px solid var(--yellow); padding-left:14px; margin-bottom:2px;
+  }
+  .future-col[data-subject="accountancy"] .timeline-panel-inner .note{ border-left-color:var(--pink); }
+
+  /* dedicated qualification sub-cards inside "Professional Qualifications" */
+  .qual-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:16px; }
+  .qual-card{
+    padding:14px 16px; border-radius:14px; border:1px solid var(--line); background:rgba(255,247,237,0.03);
+    transition:transform 0.4s var(--ease), border-color 0.4s var(--ease);
+  }
+  .qual-card:hover{ transform:translateY(-4px); border-color:rgba(229,56,59,0.4); }
+  .qual-card .qual-name{ display:block; font-family:'Space Grotesk', sans-serif; font-weight:700; color:var(--pink); font-size:0.9rem; }
+  .qual-card p{ margin:6px 0 0 !important; font-size:0.8rem; }
+
+  /* bottom CTA card */
+  .future-cta{
+    margin:90px auto 0; text-align:center; max-width:620px;
+    padding:52px 40px; border-radius:28px; border:1px solid var(--line);
+    background:radial-gradient(ellipse 120% 100% at 50% 0%, rgba(255,122,26,0.14), transparent 70%), rgba(255,247,237,0.02);
+    transition:transform 0.5s var(--ease), border-color 0.5s var(--ease), box-shadow 0.5s var(--ease);
+  }
+  .future-cta:hover{ transform:translateY(-6px); border-color:rgba(255,210,63,0.4); box-shadow:0 26px 60px rgba(255,122,26,0.22); }
+  .future-cta h3{ font-size:1.7rem; margin-bottom:14px; }
+  .future-cta p{ color:var(--paper-dim); line-height:1.6; margin-bottom:30px; }
+
+  @media (max-width: 860px){
+    nav{ display:none; }
+    .wrap{ padding:0 20px; }
+    .card-grid{ grid-template-columns:1fr; gap:18px; }
+    .craft-inner{ grid-template-columns:1fr; gap:40px; }
+    .craft-visual{ height:260px; }
+
+    /* two-column sections (Meet the Teacher / Levels) collapse to a single column */
+    .split-section{ padding:72px 0; }
+    .split-grid{ grid-template-columns:1fr; gap:36px; }
+    .book-circle-lg{ width:180px; height:180px; }
+    .book-circle-md{ width:150px; height:150px; }
+    .book-circle-sm{ width:96px; height:96px; }
+    .cine-screen{ transform:rotateY(-9deg) rotateX(2deg); }
+    .block-photo:hover .cine-screen{ transform:rotateY(-9deg) rotateX(2deg); }
+
+    .future-head{ margin-bottom:52px; }
+    .future-columns{ grid-template-columns:1fr; gap:56px; }
+    .qual-grid{ grid-template-columns:1fr; }
+    .future-cta{ margin-top:64px; padding:38px 24px; }
+    .future-cta h3{ font-size:1.4rem; }
+
+    .section-head{ padding:80px 0 40px; }
+    .process{ padding:40px 0 90px; }
+    .process-list{ margin-left:4px; }
+    .process-item{ padding:28px 0 28px 36px; }
+    .craft{ padding:0 0 90px; }
+    .cta{ padding:90px 0; }
+    .collection{ padding-bottom:90px; }
+    .meet-block{ padding:26px 22px; }
+    .notice-board{ padding:28px 20px 22px; }
+    .note-card{ padding:18px 18px; }
+    .card{ padding:26px 22px 24px; }
+
+    .hero-ctas{ flex-direction:column; width:100%; }
+    .hero-ctas a{ width:100%; }
+    .btn-primary, .btn-ghost{ width:100%; text-align:center; justify-content:center; }
+
+    .socials{ gap:10px; }
+    .socials a{ font-size:0.72rem; padding:8px 14px; }
+    footer .wrap{ flex-direction:column; text-align:center; }
+
+    .hero-grid{ grid-template-columns:1fr; gap:34px; }
+    .game-circle{ width:240px; height:240px; }
+    .game-character{ width:36px; height:42px; }
+    .grade-marker{ width:28px; height:28px; font-size:0.68rem; }
+    .grade-marker[data-grade="A*"]{ width:34px; height:34px; font-size:0.72rem; }
+  }
+
+  @media (max-width: 480px){
+    .hero p.sub{ font-size:0.95rem; }
+    #musicToggle{ width:46px; height:46px; bottom:18px; right:18px; }
+    .meet-block{ padding:22px 18px; }
+    .card{ padding:22px 18px 20px; }
+    .box-left{ padding-right:3vw; }
+    .box-right{ padding-left:3vw; }
+    .box-panel .word{ font-size:clamp(1.4rem, 8vw, 4.4rem); }
+    .game-circle{ width:200px; height:200px; }
+    .timeline-node{ width:44px; height:44px; font-size:1.05rem; }
+    .timeline::before{ left:22px; }
+    .timeline-item{ gap:14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body class="is-loading">
+
+<div id="loadingScreen">
+  <div class="loader-mark">
+    <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+      <path d="M60 20 C48 10 28 8 12 12 L12 82 C28 78 48 80 60 90 Z" fill="#FF7A1A"/>
+      <path d="M60 20 C72 10 92 8 108 12 L108 82 C92 78 72 80 60 90 Z" fill="#E5383B"/>
+      <line x1="60" y1="20" x2="60" y2="90" stroke="#FFD23F" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="loader-label mono">malik.teaches</div>
+</div>
+
+<div class="cursor" id="cursor"></div>
+
+<!-- Drop your music file in an "assets" folder next to this HTML file, named music.mp3 (or update the src below) -->
+<audio id="bgMusic" src="music.mp3" loop preload="none"></audio>
+<div id="musicToggle" title="Toggle music">
+  <svg viewBox="0 0 24 24" fill="none">
+    <rect class="eq-bar" x="4" y="9" width="3" height="6" rx="1"/>
+    <rect class="eq-bar" x="10.5" y="5" width="3" height="14" rx="1"/>
+    <rect class="eq-bar" x="17" y="11" width="3" height="4" rx="1"/>
+  </svg>
+</div>
+
+<!-- Header removed as requested -->
+
+<section class="hero-pin" id="heroPin">
+  <div class="hero-sticky" id="heroSticky">
+
+    <div class="hero" id="heroInner">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <!-- <span class="eyebrow">📚 O &amp; A Level Business, Accounts + Real Stock Market Training</span> -->
+          <h1>
+            <span class="grad">Path to Grades</span></h1>
+          <p class="sub">O Levels (IGCSE) &amp; A Levels Business Studies and Accounting the way it should've been taught.</p>
+          <div class="hero-ctas">
+            <a href="https://wa.me/923016777449" target="_blank" rel="noopener" class="btn-primary">Book a free trial class →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="box-panel box-left" id="boxLeft"><span class="word">malik</span></div>
+    <div class="box-panel box-right" id="boxRight"><span class="word">teaches</span></div>
+
+    <div class="scroll-cue" id="scrollCue"><div class="line"></div><span>Scroll to open</span></div>
+  </div>
+</section>
+
+<!-- Second Section: Meet the Teacher — grid of colored blocks -->
+<section id="meet" class="split-section">
+  <!-- Pipe connecting the landing circle to the photo/video frame — dormant line by default,
+       carries a travelling glow from circle to frame the moment the book lands. Path is
+       computed in JS since it must always start/end exactly at those two elements. -->
+  <svg id="energyPipe" class="energy-pipe" aria-hidden="true">
+    <path id="energyPipeBase" class="energy-pipe-base"></path>
+    <path id="energyPipeFlow" class="energy-pipe-flow"></path>
+  </svg>
+
+  <div class="wrap">
+    <div class="split-grid">
+      <!-- Book landing circle: empty target, the single floating book flies in here -->
+      <div class="reveal" style="text-align: center;">
+        <div id="bookCircle1" class="book-landing-circle book-circle book-circle-lg">
+        </div>
+      </div>
+
+      <!-- Right column: Meet the teacher, as a stack of colored blocks -->
+      <div class="meet-grid">
+        <div class="meet-block block-yellow reveal" style="transition-delay:0.05s;">
+          <span class="meet-label">Who's Teaching</span>
+          <h2>Meet the Teacher</h2>
+        </div>
+
+        <div id="teacherFrame" class="meet-block block-photo reveal" style="transition-delay:0.15s;">
+          <div class="cine-stage">
+            <div class="cine-glow" aria-hidden="true"></div>
+            <!-- Drop your photo in an "assets" folder next to this HTML file, named photo.jpg (or update the path below) -->
+            <div id="teacherPhoto" class="cine-screen" style="background:#000 url('ai_pic.png') center/cover;">
+              <span class="cine-bar cine-bar-top" aria-hidden="true"></span>
+              <span class="cine-bar cine-bar-bottom" aria-hidden="true"></span>
+              <span class="cine-sheen" aria-hidden="true"></span>
+              <span class="cine-coming-soon mono">
+                <span class="cine-coming-soon-dot" aria-hidden="true"></span>
+                Intro video coming soon
+              </span>
+            </div>
+          </div>
+          <!-- Watch-intro trigger: opens the video in an overlay, so it never changes this
+               column's height (which would shift the floating book's landing position). -->
+          <button type="button" class="watch-intro-btn mono" id="watchIntroBtn" aria-haspopup="dialog">
+            <span class="watch-intro-icon">▶</span> Watch Intro
+          </button>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Intro video lightbox: fixed overlay, outside normal document flow, so it can never affect
+     the height of the Meet the Teacher column or the floating book's landing position. -->
+<div class="video-lightbox" id="videoLightbox" role="dialog" aria-modal="true" aria-label="Intro video">
+  <div class="video-lightbox-inner">
+    <button type="button" class="video-lightbox-close" id="videoLightboxClose" aria-label="Close video">✕</button>
+    <div class="video-frame" id="videoFrame">
+      <!-- Drop your intro video in an "assets" folder next to this HTML file, named intro.mp4
+           (or update the src below). Until that file exists, the placeholder below shows instead. -->
+      <video id="teacherVideo" controls playsinline preload="none" style="display:none;">
+        <source src="intro.mp4" type="video/mp4">
+      </video>
+      <div class="video-fallback" id="videoFallback">
+        <span class="video-fallback-icon">▶</span>
+        <span class="mono">Intro video coming soon</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Third Section: Choose Your Future — dual expandable timelines, book lands its second stop here -->
+<section id="future" class="split-section bg-2 future-section">
+  <div class="wrap">
+    <div class="future-head">
+      <div class="reveal" style="text-align:center;">
+        <div id="bookCircle3" class="book-landing-circle book-circle book-circle-sm"></div>
+      </div>
+      <span class="eyebrow mono reveal" style="animation:none;">Your Path Forward</span>
+      <h2 class="reveal" style="transition-delay:0.1s;">Choose Your Future</h2>
+      <p class="reveal" style="transition-delay:0.2s;">Business and Accountancy are among the most future-proof Cambridge subjects. Explore where each pathway can take you.</p>
+    </div>
+
+    <div class="future-columns">
+
+      <!-- LEFT COLUMN: Cambridge Business -->
+      <div class="future-col" data-subject="business">
+        <button type="button" class="future-col-title reveal" id="future-col-business-toggle" aria-expanded="false" aria-controls="future-col-business-body">
+          <span class="future-col-title-text">🧭 Cambridge Business</span>
+          <span class="plus-icon future-col-plus" aria-hidden="true"></span>
+        </button>
+        <div class="future-col-body" id="future-col-business-body">
+        <div class="future-col-body-inner">
+        <div class="timeline" data-timeline="business">
+
+          <div class="timeline-item" style="transition-delay:0.05s;">
+            <div class="timeline-node" aria-hidden="true">🎯</div>
+            <div class="timeline-body">
+              <button type="button" class="timeline-header" id="biz-1-header" aria-expanded="false" aria-controls="biz-1-panel">
+                <span class="timeline-header-text">
+                  <span class="timeline-title">Why Choose Business?</span>
+                  <span class="timeline-subtitle">Understand how companies work, lead teams, and make real decisions.</span>
+                </span>
+                <span class="plus-icon" aria-hidden="true"></span>
+              </button>
+              <div class="timeline-panel-wrap">
+                <div class="timeline-panel" id="biz-1-panel" role="region" aria-labelledby="biz-1-header">
+                  <div class="timeline-panel-inner">
+                    <p>Business Studies gives you a working model of how the world actually runs — how companies are built, funded, marketed and led. It's less about memorising theory and more about learning to think like a decision-maker.</p>
+                    <ul>
+                      <li>Understand how companies really work</li>
+                      <li>Sharpen decision-making under pressure</li>
+                      <li>Build leadership instincts early</li>
+                      <li>Learn marketing, finance basics &amp; entrepreneurship</li>
+                      <li>Practice real-world, transferable skills</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item" style="transition-delay:0.1s;">
+            <div class="timeline-node" aria-hidden="true">🎓</div>
+            <div class="timeline-body">
+              <button type="button" class="timeline-header" id="biz-2-header" aria-expanded="false" aria-controls="biz-2-panel">
+                <span class="timeline-header-text">
+                  <span class="timeline-title">University Degrees</span>
+                  <span class="timeline-subtitle">One foundation, many directions — from BBA to Public Administration.</span>
+                </span>
+                <span class="plus-icon" aria-hidden="true"></span>
+              </button>
+              <div class="timeline-panel-wrap">
+                <div class="timeline-panel" id="biz-2-panel" role="region" aria-labelledby="biz-2-header">
+                  <div class="timeline-panel-inner">
+                    <p>A Business background opens the door to a wide spread of degrees, each leading somewhere different:</p>
+                    <ul>
+                      <li><strong>BBA / BS Business Administration</strong> — broad management foundation</li>
+                      <li><strong>Marketing</strong> — brands, campaigns, consumer behaviour</li>
+                      <li><strong>Human Resource Management</strong> — people, culture, talent</li>
+                      <li><strong>International Business</strong> — global trade &amp; strategy</li>
+                      <li><strong>Supply Chain &amp; Management</strong> — operations that keep companies running</li>
+                      <li><strong>Entrepreneurship</strong> — building ventures from scratch</li>
+                      <li><strong>Economics &amp; Public Administration</strong> — policy, markets, governance</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item" style="transition-delay:0.15s;">
+            <div class="timeline-node" aria-hidden="true">💼</div>
+            <div class="timeline-body">
+              <button type="button" class="timeline-header" id="biz-3-header" aria-expanded="false" aria-controls="biz-3-panel">
+                <span class="timeline-header-text">
+                  <span class="timeline-title">Professional Careers</span>
+                  <span class="timeline-subtitle">From startup founder to CEO — leadership roles in every industry.</span>
+                </span>
+                <span class="plus-icon" aria-hidden="true"></span>
+              </button>
+              <div class="timeline-panel-wrap">
+                <div class="timeline-panel" id="biz-3-panel" role="region" aria-labelledby="biz-3-header">
+                  <div class="timeline-panel-inner">
+                    <p>Business graduates step into roles that exist in almost every company, at every stage:</p>
+                    <ul>
+                      <li>Entrepreneur / Startup Founder</li>
+                      <li>Business or Management Consultant</li>
+                      <li>Marketing / Brand / Product Manager</li>
+                      <li>HR, Operations &amp; Supply Chain Manager</li>
+                      <li>Project Manager / Business Analyst</li>
+                      <li>CEO — the long game</li>
+                    </ul>
+                    <p class="note">Because business skills apply everywhere, the opportunities compound as you gain experience.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item" style="transition-delay:0.2s;">
+            <div class="timeline-node" aria-hidden="true">🤖</div>
+            <div class="timeline-body">
+              <button type="button" class="timeline-header" id="biz-4-header" aria-expanded="false" aria-controls="biz-4-panel">
+                <span class="timeline-header-text">
+                  <span class="timeline-title">AI Era</span>
+                  <span class="timeline-subtitle">AI automates tasks — it can't replace leadership.</span>
+                </span>
+                <span class="plus-icon" aria-hidden="true"></span>
+              </button>
+              <div class="timeline-panel-wrap">
+                <div class="timeline-panel" id="biz-4-panel" role="region" aria-labelledby="biz-4-header">
+                  <div class="timeline-panel-inner">
+                    <p>AI is very good at automating repetitive tasks. It is not good at the things business is really about:</p>
+                    <ul>
+                      <li>Strategic decisions &amp; business model creation</li>
+                      <li>Leadership &amp; negotiation</li>
+                      <li>Innovation &amp; opportunity recognition</li>
+                      <li>Creativity, ethics &amp; customer understanding</li>
+                    </ul>
+                    <p class="note">AI needs business leaders to turn technology into successful companies.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item" style="transition-delay:0.25s;">
+            <div class="timeline-node" aria-hidden="true">🌍</div>
+            <div class="timeline-body">
+              <button type="button" class="timeline-header" id="biz-5-header" aria-expanded="false" aria-controls="biz-5-panel">
+                <span class="timeline-header-text">
+                  <span class="timeline-title">Future Outlook</span>
+                  <span class="timeline-subtitle">Business graduates work everywhere — literally every industry.</span>
+                </span>
+                <span class="plus-icon" aria-hidden="true"></span>
+              </button>
+              <div class="timeline-panel-wrap">
+                <div class="timeline-panel" id="biz-5-panel" role="region" aria-labelledby="biz-5-header">
+                  <div class="timeline-panel-inner">
+                    <p>A Business background travels. Graduates work across:</p>
+                    <ul>
+                      <li>Healthcare, Technology &amp; Finance</li>
+                      <li>Government &amp; NGOs</li>
+                      <li>Manufacturing &amp; Retail</li>
+                      <li>Consulting &amp; International Organizations</li>
+                    </ul>
+                    <p class="note">Excellent global employability — wherever you go, business goes with you.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COLUMN: Cambridge Accountancy -->
+      <div class="future-col" data-subject="accountancy">
+        <button type="button" class="future-col-title reveal" id="future-col-accountancy-toggle" aria-expanded="false" aria-controls="future-col-accountancy-body">
+          <span class="future-col-title-text">📊 Cambridge Accountancy</span>
+          <span class="plus-icon future-col-plus" aria-hidden="true"></span>
+        </button>
+        <div class="future-col-body" id="future-col-accountancy-body">
+        <div class="future-col-body-inner">
+        <div class="timeline" data-timeline="accountancy">
+
+          <div class="timeline-item" style="transition-delay:0.05s;">
+            <div class="timeline-node" aria-hidden="true">🧮</div>
+            <div class="timeline-body">
+              <button type="button" class="timeline-header" id="acc-1-header" aria-expanded="false" aria-controls="acc-1-panel">
+                <span class="timeline-header-text">
+                  <span class="timeline-title">Why Choose Accountancy?</span>
+                  <span class="timeline-subtitle">The language of business — precise, analytical, always in demand.</span>
+                </span>
+                <span class="plus-icon" aria-hidden="true"></span>
+              </button>
+              <div class="timeline-panel-wrap">
+                <div class="timeline-panel" id="acc-1-panel" role="region" aria-labelledby="acc-1-header">
+                  <div class="timeline-panel-inner">
+                    <p>Accountancy is often called the language of business — every company, in every country, needs it. It trains a specific kind of mind:</p>
+                    <ul>
+                      <li>Real financial literacy</li>
+                      <li>Sharp problem solving &amp; analytical thinking</li>
+                      <li>Precision under pressure</li>
+                      <li>Confident, evidence-based decision making</li>
+                    </ul>
+                    <p class="note">High demand, globally — accountants are needed everywhere, always.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item" style="transition-delay:0.1s;">
+            <div class="timeline-node" aria-hidden="true">🎓</div>
+            <div class="timeline-body">
+              <button type="button" class="timeline-header" id="acc-2-header" aria-expanded="false" aria-controls="acc-2-panel">
+                <span class="timeline-header-text">
+                  <span class="timeline-title">University Degrees</span>
+                  <span class="timeline-subtitle">BS Accounting to Economics — a numbers-first foundation.</span>
+                </span>
+                <span class="plus-icon" aria-hidden="true"></span>
+              </button>
+              <div class="timeline-panel-wrap">
+                <div class="timeline-panel" id="acc-2-panel" role="region" aria-labelledby="acc-2-header">
+                  <div class="timeline-panel-inner">
+                    <p>An Accountancy background leads naturally into:</p>
+                    <ul>
+                      <li><strong>BS Accounting</strong> — core technical foundation</li>
+                      <li><strong>Accounting &amp; Finance</strong> — blends both disciplines</li>
+                      <li><strong>Finance &amp; Banking</strong> — capital markets &amp; institutions</li>
+                      <li><strong>Commerce</strong> — broad business &amp; trade grounding</li>
+                      <li><strong>Economics</strong> — how markets actually behave</li>
+                      <li><strong>Auditing</strong> — specialised assurance track</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item" style="transition-delay:0.15s;">
+            <div class="timeline-node" aria-hidden="true">📜</div>
+            <div class="timeline-body">
+              <button type="button" class="timeline-header" id="acc-3-header" aria-expanded="false" aria-controls="acc-3-panel">
+                <span class="timeline-header-text">
+                  <span class="timeline-title">Professional Qualifications</span>
+                  <span class="timeline-subtitle">ACCA, CA, ICAEW, CFA — globally respected credentials.</span>
+                </span>
+                <span class="plus-icon" aria-hidden="true"></span>
+              </button>
+              <div class="timeline-panel-wrap">
+                <div class="timeline-panel" id="acc-3-panel" role="region" aria-labelledby="acc-3-header">
+                  <div class="timeline-panel-inner">
+                    <p>Beyond a degree, these qualifications open doors worldwide:</p>
+                    <div class="qual-grid">
+                      <div class="qual-card"><span class="qual-name">ACCA</span><p>Globally recognised. Covers audit, tax, finance &amp; consulting — respected inside multinational companies.</p></div>
+                      <div class="qual-card"><span class="qual-name">CA — Chartered Accountant</span><p>The classic route into public practice, audit firms &amp; senior financial leadership.</p></div>
+                      <div class="qual-card"><span class="qual-name">ICAEW</span><p>International recognition, strong footing in corporate finance, advisory &amp; leadership.</p></div>
+                      <div class="qual-card"><span class="qual-name">CFA</span><p>Built for investment — portfolio management, equity research, asset management &amp; investment banking.</p></div>
+                      <div class="qual-card" style="grid-column:1 / -1;"><span class="qual-name">Taxation</span><p>Tax consultant, corporate &amp; international tax, or a role inside government tax departments.</p></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item" style="transition-delay:0.2s;">
+            <div class="timeline-node" aria-hidden="true">💼</div>
+            <div class="timeline-body">
+              <button type="button" class="timeline-header" id="acc-4-header" aria-expanded="false" aria-controls="acc-4-panel">
+                <span class="timeline-header-text">
+                  <span class="timeline-title">Career Opportunities</span>
+                  <span class="timeline-subtitle">From auditor to CFO — accountancy careers run deep.</span>
+                </span>
+                <span class="plus-icon" aria-hidden="true"></span>
+              </button>
+              <div class="timeline-panel-wrap">
+                <div class="timeline-panel" id="acc-4-panel" role="region" aria-labelledby="acc-4-header">
+                  <div class="timeline-panel-inner">
+                    <p>Accountancy careers rarely stay narrow — they branch:</p>
+                    <ul>
+                      <li>Chartered Accountant / Auditor / Internal Auditor</li>
+                      <li>Financial Analyst / Investment Analyst</li>
+                      <li>Finance Manager / Financial Controller / CFO</li>
+                      <li>Tax Consultant / Budget Analyst / Risk Analyst</li>
+                      <li>Banking Officer / Treasury Manager</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item" style="transition-delay:0.25s;">
+            <div class="timeline-node" aria-hidden="true">🤖</div>
+            <div class="timeline-body">
+              <button type="button" class="timeline-header" id="acc-5-header" aria-expanded="false" aria-controls="acc-5-panel">
+                <span class="timeline-header-text">
+                  <span class="timeline-title">AI Era</span>
+                  <span class="timeline-subtitle">AI automates bookkeeping — trust still needs a human signature.</span>
+                </span>
+                <span class="plus-icon" aria-hidden="true"></span>
+              </button>
+              <div class="timeline-panel-wrap">
+                <div class="timeline-panel" id="acc-5-panel" role="region" aria-labelledby="acc-5-header">
+                  <div class="timeline-panel-inner">
+                    <p>AI can now handle a lot of routine bookkeeping. What it can't do is stand behind the numbers. Humans remain essential for:</p>
+                    <ul>
+                      <li>Financial judgement &amp; strategy</li>
+                      <li>Auditing, ethics &amp; regulation</li>
+                      <li>Tax planning &amp; corporate governance</li>
+                      <li>Risk management, compliance &amp; decision making</li>
+                    </ul>
+                    <p class="note">AI assists accountants — it does not replace trusted financial professionals.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom centered CTA card -->
+    <div class="future-cta reveal">
+      <h3>Still Unsure?</h3>
+      <p>Book a free counselling session and discover which Cambridge subject matches your goals.</p>
+      <a href="https://wa.me/923016777449" target="_blank" rel="noopener" class="btn-primary future-cta-btn">Book Free Career Guidance →</a>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .scholarships-section{ padding:100px 0 90px; background:var(--ink-2); position:relative; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+  .schol-head{ text-align:center; max-width:720px; margin:0 auto 42px; }
+  .schol-head .eyebrow{ display:inline-block; margin-bottom:14px; }
+  .schol-head h2{ font-size:clamp(1.7rem,4vw,2.5rem); margin-bottom:14px; }
+  .schol-head p{ opacity:0.75; line-height:1.65; margin-bottom:28px; }
+
+  .schol-search-wrap{ max-width:420px; margin:0 auto; position:relative; }
+  .schol-search{ width:100%; padding:14px 18px 14px 44px; border-radius:100px; border:1px solid rgba(255,247,237,0.16);
+    background:rgba(255,247,237,0.05); color:var(--paper); font-family:'Inter',sans-serif; font-size:0.9rem; outline:none;
+    transition:border-color var(--dur-s) var(--ease), background var(--dur-s) var(--ease); }
+  .schol-search::placeholder{ color:rgba(255,247,237,0.4); }
+  .schol-search:focus{ border-color:var(--yellow); background:rgba(255,247,237,0.08); }
+  .schol-search-icon{ position:absolute; left:18px; top:50%; transform:translateY(-50%); opacity:0.45; pointer-events:none; }
+  .schol-search-count{ text-align:center; margin-top:12px; font-size:0.74rem; opacity:0.55; }
+
+  .schol-categories{ display:flex; flex-direction:column; gap:14px; max-width:900px; margin:38px auto 0; }
+  .schol-cat{ border:1px solid rgba(255,247,237,0.12); border-radius:18px; background:rgba(255,247,237,0.02);
+    overflow:hidden; transition:border-color var(--dur-s) var(--ease); }
+  .schol-cat.is-open{ border-color:rgba(255,210,63,0.4); }
+  .schol-cat-toggle{ width:100%; display:flex; align-items:center; gap:14px; padding:20px 22px; background:none;
+    border:none; cursor:pointer; text-align:left; color:var(--paper); font-family:'Space Grotesk',sans-serif; }
+  .schol-cat-icon{ font-size:1.35rem; flex-shrink:0; }
+  .schol-cat-title{ flex:1; font-weight:600; font-size:0.98rem; }
+  .schol-cat-count{ font-family:'JetBrains Mono',monospace; font-size:0.68rem; opacity:0.5; white-space:nowrap; }
+  .schol-plus{ width:20px; height:20px; position:relative; flex-shrink:0; }
+  .schol-plus::before,.schol-plus::after{ content:""; position:absolute; background:var(--yellow); border-radius:2px;
+    transition:transform var(--dur-s) var(--ease), opacity var(--dur-s) var(--ease); }
+  .schol-plus::before{ width:100%; height:2px; top:50%; left:0; transform:translateY(-50%); }
+  .schol-plus::after{ width:2px; height:100%; left:50%; top:0; transform:translateX(-50%); }
+  .schol-cat.is-open .schol-plus::after{ transform:translateX(-50%) rotate(90deg); opacity:0; }
+
+  .schol-cat-panel{ max-height:0; overflow:hidden; transition:max-height 0.5s var(--ease); }
+  .schol-cat.is-open .schol-cat-panel{ max-height:6000px; }
+  .schol-cat-panel-inner{ padding:0 22px 26px; display:flex; flex-direction:column; gap:20px; }
+
+  .schol-group h4{ font-size:0.76rem; text-transform:uppercase; letter-spacing:0.06em; opacity:0.55; margin-bottom:10px;
+    font-family:'JetBrains Mono',monospace; font-weight:500; }
+  .schol-links{ display:flex; flex-wrap:wrap; gap:8px; }
+  .schol-link{ display:inline-flex; align-items:center; gap:6px; padding:8px 14px; border-radius:100px;
+    background:rgba(255,247,237,0.05); border:1px solid rgba(255,247,237,0.1); font-size:0.79rem;
+    transition:background var(--dur-s) var(--ease), border-color var(--dur-s) var(--ease), transform var(--dur-s) var(--ease); }
+  .schol-link:hover{ background:rgba(255,210,63,0.14); border-color:rgba(255,210,63,0.4); transform:translateY(-2px); }
+  .schol-link.is-hidden{ display:none; }
+  .schol-group.is-hidden{ display:none; }
+  .schol-cat.is-search-hidden{ display:none; }
+
+  .schol-note{ margin-top:2px; font-size:0.74rem; opacity:0.55; line-height:1.5; }
+  .schol-disclaimer{ text-align:center; max-width:640px; margin:36px auto 0; font-size:0.76rem; opacity:0.5; line-height:1.65; }
+
+  @media (max-width:640px){
+    .schol-cat-title{ font-size:0.9rem; }
+    .schol-cat-count{ display:none; }
+    .schol-link{ font-size:0.74rem; padding:7px 12px; }
+  }
+</style>
+
+<section class="scholarships-section" id="scholarships">
+  <div class="wrap">
+
+    <div class="schol-head reveal">
+      <span class="eyebrow mono">One-Stop Resource</span>
+      <h2>🎓 Global Scholarships Directory</h2>
+      <p>Every major scholarship portal, government program, and university funding page — organised by region so you can find real, fundable opportunities without digging through fifty tabs. Tap a category to expand it, or search below.</p>
+
+      <div class="schol-search-wrap">
+        <span class="schol-search-icon">🔍</span>
+        <input type="text" id="scholSearch" class="schol-search" placeholder="Search by country, university or keyword…" autocomplete="off">
+      </div>
+      <div class="schol-search-count mono" id="scholSearchCount"></div>
+    </div>
+
+    <div class="schol-categories" id="scholCategories">
+
+      <!-- ================= EUROPE ================= -->
+      <div class="schol-cat">
+        <button type="button" class="schol-cat-toggle" aria-expanded="false" aria-controls="schol-panel-europe">
+          <span class="schol-cat-icon">🇪🇺</span>
+          <span class="schol-cat-title">Europe, Balkans, Caucasus &amp; Central Asia</span>
+          <span class="schol-cat-count"></span>
+          <span class="plus-icon schol-plus" aria-hidden="true"></span>
+        </button>
+        <div class="schol-cat-panel" id="schol-panel-europe">
+          <div class="schol-cat-panel-inner">
+
+            <div class="schol-group">
+              <h4>🇮🇹 Italy</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://studyinitaly.esteri.it/" target="_blank" rel="noopener">Study in Italy — Official</a>
+                <a class="schol-link" href="https://www.unibo.it/" target="_blank" rel="noopener">University of Bologna</a>
+                <a class="schol-link" href="https://www.polimi.it/" target="_blank" rel="noopener">Politecnico di Milano</a>
+                <a class="schol-link" href="https://www.unipd.it/" target="_blank" rel="noopener">University of Padua</a>
+                <a class="schol-link" href="https://www.unipi.it/" target="_blank" rel="noopener">University of Pisa</a>
+                <a class="schol-link" href="https://www.unimi.it/" target="_blank" rel="noopener">University of Milan</a>
+                <a class="schol-link" href="https://www.santannapisa.it/" target="_blank" rel="noopener">Sant'Anna Pisa</a>
+                <a class="schol-link" href="https://www.sissa.it/" target="_blank" rel="noopener">SISSA</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇪🇸 Spain</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.educacion.gob.es/" target="_blank" rel="noopener">Ministry of Education</a>
+                <a class="schol-link" href="https://www.uab.cat/" target="_blank" rel="noopener">UAB Barcelona</a>
+                <a class="schol-link" href="https://www.ub.edu/" target="_blank" rel="noopener">University of Barcelona</a>
+                <a class="schol-link" href="https://www.uc3m.es/" target="_blank" rel="noopener">Carlos III Madrid</a>
+                <a class="schol-link" href="https://www.upc.edu/" target="_blank" rel="noopener">Polytechnic of Catalonia</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇵🇹 Portugal</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.study-research.pt/" target="_blank" rel="noopener">Study &amp; Research in Portugal</a>
+                <a class="schol-link" href="https://www.ulisboa.pt/" target="_blank" rel="noopener">University of Lisbon</a>
+                <a class="schol-link" href="https://www.up.pt/" target="_blank" rel="noopener">University of Porto</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇩🇪 Germany</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.daad.de/en/" target="_blank" rel="noopener">DAAD Scholarship Database</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇫🇷 France</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.campusfrance.org/en" target="_blank" rel="noopener">Campus France</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇳🇱 Netherlands</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.studyinnl.org/" target="_blank" rel="noopener">Study in NL / Holland Scholarship</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇨🇭 Switzerland</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://ethz.ch/" target="_blank" rel="noopener">ETH Zurich</a>
+                <a class="schol-link" href="https://www.epfl.ch/" target="_blank" rel="noopener">EPFL</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇦🇹 Austria</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.studyinaustria.at/" target="_blank" rel="noopener">Study in Austria</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>Nordics</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.studyinnorway.no/" target="_blank" rel="noopener">🇳🇴 Study in Norway</a>
+                <a class="schol-link" href="https://www.studyinsweden.se/" target="_blank" rel="noopener">🇸🇪 Study in Sweden</a>
+                <a class="schol-link" href="https://www.studyindenmark.dk/" target="_blank" rel="noopener">🇩🇰 Study in Denmark</a>
+                <a class="schol-link" href="https://www.studyinfinland.fi/" target="_blank" rel="noopener">🇫🇮 Study in Finland</a>
+                <a class="schol-link" href="https://studyiniceland.is/" target="_blank" rel="noopener">🇮🇸 Study in Iceland</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>Baltics</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://studyinestonia.ee/" target="_blank" rel="noopener">🇪🇪 Study in Estonia</a>
+                <a class="schol-link" href="https://www.studyinlatvia.lv/" target="_blank" rel="noopener">🇱🇻 Study in Latvia</a>
+                <a class="schol-link" href="https://studyin.lt/" target="_blank" rel="noopener">🇱🇹 Study in Lithuania</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>Small States</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.uni.lu/" target="_blank" rel="noopener">🇱🇺 University of Luxembourg</a>
+                <a class="schol-link" href="https://www.um.edu.mt/" target="_blank" rel="noopener">🇲🇹 University of Malta</a>
+                <a class="schol-link" href="https://studyingreece.edu.gr/" target="_blank" rel="noopener">🇬🇷 Study in Greece</a>
+                <a class="schol-link" href="https://www.ucy.ac.cy/" target="_blank" rel="noopener">🇨🇾 University of Cyprus</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>Balkans</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://studyinslovenia.si/" target="_blank" rel="noopener">🇸🇮 Study in Slovenia</a>
+                <a class="schol-link" href="https://studyincroatia.hr/" target="_blank" rel="noopener">🇭🇷 Study in Croatia</a>
+                <a class="schol-link" href="https://studyinserbia.rs/" target="_blank" rel="noopener">🇷🇸 Study in Serbia</a>
+                <a class="schol-link" href="https://www.studyinbulgaria.bg/" target="_blank" rel="noopener">🇧🇬 Study in Bulgaria</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>Caucasus &amp; Central Asia</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://studyingeorgia.ge/" target="_blank" rel="noopener">🇬🇪 Study in Georgia</a>
+                <a class="schol-link" href="https://studyinazerbaijan.edu.az/" target="_blank" rel="noopener">🇦🇿 Study in Azerbaijan</a>
+                <a class="schol-link" href="https://bolashak.gov.kz/" target="_blank" rel="noopener">🇰🇿 Bolashak — Kazakhstan</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= UK & IRELAND ================= -->
+      <div class="schol-cat">
+        <button type="button" class="schol-cat-toggle" aria-expanded="false" aria-controls="schol-panel-uk">
+          <span class="schol-cat-icon">🇬🇧</span>
+          <span class="schol-cat-title">UK &amp; Ireland</span>
+          <span class="schol-cat-count"></span>
+          <span class="plus-icon schol-plus" aria-hidden="true"></span>
+        </button>
+        <div class="schol-cat-panel" id="schol-panel-uk">
+          <div class="schol-cat-panel-inner">
+
+            <div class="schol-group">
+              <h4>National Scholarship Programs</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.chevening.org/" target="_blank" rel="noopener">Chevening Scholarships</a>
+                <a class="schol-link" href="https://cscuk.fcdo.gov.uk/" target="_blank" rel="noopener">Commonwealth Scholarships</a>
+                <a class="schol-link" href="https://www.rhodeshouse.ox.ac.uk/" target="_blank" rel="noopener">Rhodes Scholarships</a>
+                <a class="schol-link" href="https://www.educationinireland.com/" target="_blank" rel="noopener">🇮🇪 Education in Ireland</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>Universities</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.ox.ac.uk/" target="_blank" rel="noopener">Oxford</a>
+                <a class="schol-link" href="https://www.cam.ac.uk/" target="_blank" rel="noopener">Cambridge</a>
+                <a class="schol-link" href="https://www.imperial.ac.uk/" target="_blank" rel="noopener">Imperial College</a>
+                <a class="schol-link" href="https://www.ucl.ac.uk/" target="_blank" rel="noopener">UCL</a>
+                <a class="schol-link" href="https://www.kcl.ac.uk/" target="_blank" rel="noopener">King's College London</a>
+                <a class="schol-link" href="https://www.lse.ac.uk/" target="_blank" rel="noopener">LSE</a>
+                <a class="schol-link" href="https://www.ed.ac.uk/" target="_blank" rel="noopener">Edinburgh</a>
+                <a class="schol-link" href="https://www.manchester.ac.uk/" target="_blank" rel="noopener">Manchester</a>
+                <a class="schol-link" href="https://www.birmingham.ac.uk/" target="_blank" rel="noopener">Birmingham</a>
+                <a class="schol-link" href="https://www.bath.ac.uk/" target="_blank" rel="noopener">Bath</a>
+                <a class="schol-link" href="https://www.nottingham.ac.uk/" target="_blank" rel="noopener">Nottingham</a>
+                <a class="schol-link" href="https://www.warwick.ac.uk/" target="_blank" rel="noopener">Warwick</a>
+                <a class="schol-link" href="https://www.glasgow.ac.uk/" target="_blank" rel="noopener">Glasgow</a>
+                <a class="schol-link" href="https://www.leeds.ac.uk/" target="_blank" rel="noopener">Leeds</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= USA & CANADA ================= -->
+      <div class="schol-cat">
+        <button type="button" class="schol-cat-toggle" aria-expanded="false" aria-controls="schol-panel-usa">
+          <span class="schol-cat-icon">🇺🇸</span>
+          <span class="schol-cat-title">USA &amp; Canada</span>
+          <span class="schol-cat-count"></span>
+          <span class="plus-icon schol-plus" aria-hidden="true"></span>
+        </button>
+        <div class="schol-cat-panel" id="schol-panel-usa">
+          <div class="schol-cat-panel-inner">
+
+            <div class="schol-group">
+              <h4>National Programs</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://foreign.fulbrightonline.org/" target="_blank" rel="noopener">Fulbright Foreign Student Program</a>
+                <a class="schol-link" href="https://educationusa.state.gov/" target="_blank" rel="noopener">EducationUSA</a>
+                <a class="schol-link" href="https://www.educanada.ca/" target="_blank" rel="noopener">🇨🇦 EduCanada</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>US Universities</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.harvard.edu/" target="_blank" rel="noopener">Harvard</a>
+                <a class="schol-link" href="https://www.mit.edu/" target="_blank" rel="noopener">MIT</a>
+                <a class="schol-link" href="https://www.princeton.edu/" target="_blank" rel="noopener">Princeton</a>
+                <a class="schol-link" href="https://admissions.yale.edu/" target="_blank" rel="noopener">Yale</a>
+                <a class="schol-link" href="https://admission.stanford.edu/" target="_blank" rel="noopener">Stanford</a>
+                <a class="schol-link" href="https://www.caltech.edu/" target="_blank" rel="noopener">Caltech</a>
+                <a class="schol-link" href="https://www.columbia.edu/" target="_blank" rel="noopener">Columbia</a>
+                <a class="schol-link" href="https://www.cornell.edu/" target="_blank" rel="noopener">Cornell</a>
+                <a class="schol-link" href="https://www.upenn.edu/" target="_blank" rel="noopener">UPenn</a>
+                <a class="schol-link" href="https://www.duke.edu/" target="_blank" rel="noopener">Duke</a>
+                <a class="schol-link" href="https://www.northwestern.edu/" target="_blank" rel="noopener">Northwestern</a>
+                <a class="schol-link" href="https://www.jhu.edu/" target="_blank" rel="noopener">Johns Hopkins</a>
+                <a class="schol-link" href="https://www.berkeley.edu/" target="_blank" rel="noopener">Berkeley</a>
+                <a class="schol-link" href="https://www.ucla.edu/" target="_blank" rel="noopener">UCLA</a>
+                <a class="schol-link" href="https://www.usc.edu/" target="_blank" rel="noopener">USC</a>
+                <a class="schol-link" href="https://www.uchicago.edu/" target="_blank" rel="noopener">UChicago</a>
+                <a class="schol-link" href="https://www.nyu.edu/" target="_blank" rel="noopener">NYU</a>
+                <a class="schol-link" href="https://www.tamu.edu/" target="_blank" rel="noopener">Texas A&amp;M</a>
+                <a class="schol-link" href="https://www.purdue.edu/" target="_blank" rel="noopener">Purdue</a>
+                <a class="schol-link" href="https://www.msu.edu/" target="_blank" rel="noopener">Michigan State</a>
+                <a class="schol-link" href="https://www.psu.edu/" target="_blank" rel="noopener">Penn State</a>
+                <a class="schol-link" href="https://www.illinois.edu/" target="_blank" rel="noopener">Illinois</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>Canada</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.utoronto.ca/" target="_blank" rel="noopener">University of Toronto</a>
+                <a class="schol-link" href="https://www.ubc.ca/" target="_blank" rel="noopener">UBC</a>
+                <a class="schol-link" href="https://www.mcgill.ca/" target="_blank" rel="noopener">McGill</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= ASIA & PACIFIC ================= -->
+      <div class="schol-cat">
+        <button type="button" class="schol-cat-toggle" aria-expanded="false" aria-controls="schol-panel-asia">
+          <span class="schol-cat-icon">🌏</span>
+          <span class="schol-cat-title">Asia &amp; Pacific</span>
+          <span class="schol-cat-count"></span>
+          <span class="plus-icon schol-plus" aria-hidden="true"></span>
+        </button>
+        <div class="schol-cat-panel" id="schol-panel-asia">
+          <div class="schol-cat-panel-inner">
+
+            <div class="schol-group">
+              <h4>East Asia</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.studyinjapan.go.jp/en/" target="_blank" rel="noopener">🇯🇵 MEXT / Study in Japan</a>
+                <a class="schol-link" href="https://www.campuschina.org/" target="_blank" rel="noopener">🇨🇳 Chinese Govt Scholarship (CSC)</a>
+                <a class="schol-link" href="https://www.studyinkorea.go.kr/" target="_blank" rel="noopener">🇰🇷 Study in Korea (GKS)</a>
+                <a class="schol-link" href="https://www.studyintaiwan.org/" target="_blank" rel="noopener">🇹🇼 Study in Taiwan</a>
+                <a class="schol-link" href="https://taiwanscholarship.moe.gov.tw/" target="_blank" rel="noopener">🇹🇼 Taiwan Scholarship</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>Southeast Asia</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.studyinthailand.org/" target="_blank" rel="noopener">🇹🇭 Study in Thailand</a>
+                <a class="schol-link" href="https://knb.kemdikbud.go.id/" target="_blank" rel="noopener">🇮🇩 Indonesia — KNB Scholarship</a>
+                <a class="schol-link" href="https://www.mfa.gov.bn/" target="_blank" rel="noopener">🇧🇳 Brunei — MFA</a>
+                <a class="schol-link" href="https://moet.gov.vn/" target="_blank" rel="noopener">🇻🇳 Vietnam — MOET</a>
+                <a class="schol-link" href="https://www.studymalaysia.com/" target="_blank" rel="noopener">🇲🇾 Study Malaysia</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>Oceania</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.australiaawards.gov.au/" target="_blank" rel="noopener">🇦🇺 Australia Awards</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= MIDDLE EAST & GULF ================= -->
+      <div class="schol-cat">
+        <button type="button" class="schol-cat-toggle" aria-expanded="false" aria-controls="schol-panel-gulf">
+          <span class="schol-cat-icon">🕌</span>
+          <span class="schol-cat-title">Middle East &amp; Gulf (GCC)</span>
+          <span class="schol-cat-count"></span>
+          <span class="plus-icon schol-plus" aria-hidden="true"></span>
+        </button>
+        <div class="schol-cat-panel" id="schol-panel-gulf">
+          <div class="schol-cat-panel-inner">
+
+            <div class="schol-group">
+              <h4>🇸🇦 Saudi Arabia</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.moe.gov.sa/" target="_blank" rel="noopener">Ministry of Education</a>
+                <a class="schol-link" href="https://www.kaust.edu.sa/en/study" target="_blank" rel="noopener">KAUST Scholarships</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇦🇪 UAE</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.moe.gov.ae/" target="_blank" rel="noopener">Ministry of Education</a>
+                <a class="schol-link" href="https://www.ku.ac.ae/" target="_blank" rel="noopener">Khalifa University</a>
+                <a class="schol-link" href="https://www.uaeu.ac.ae/" target="_blank" rel="noopener">UAE University</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇶🇦 Qatar</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.qu.edu.qa/" target="_blank" rel="noopener">Qatar University</a>
+                <a class="schol-link" href="https://www.hbku.edu.qa/" target="_blank" rel="noopener">Hamad Bin Khalifa University</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇰🇼 Kuwait</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.ku.edu.kw/" target="_blank" rel="noopener">Kuwait University</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇴🇲 Oman</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.squ.edu.om/" target="_blank" rel="noopener">Sultan Qaboos University</a>
+              </div>
+            </div>
+
+            <div class="schol-group">
+              <h4>🇧🇭 Bahrain</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.uob.edu.bh/" target="_blank" rel="noopener">University of Bahrain</a>
+              </div>
+            </div>
+
+            <p class="schol-note">Most Gulf government scholarships prioritise GCC nationals or residents — always check eligibility on the official page before applying.</p>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= AFRICA ================= -->
+      <div class="schol-cat">
+        <button type="button" class="schol-cat-toggle" aria-expanded="false" aria-controls="schol-panel-africa">
+          <span class="schol-cat-icon">🌍</span>
+          <span class="schol-cat-title">Africa</span>
+          <span class="schol-cat-count"></span>
+          <span class="plus-icon schol-plus" aria-hidden="true"></span>
+        </button>
+        <div class="schol-cat-panel" id="schol-panel-africa">
+          <div class="schol-cat-panel-inner">
+
+            <div class="schol-group">
+              <h4>Country &amp; Foundation Programs</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.nrf.ac.za/" target="_blank" rel="noopener">🇿🇦 South Africa — NRF</a>
+                <a class="schol-link" href="https://fsbn.com.ng/" target="_blank" rel="noopener">🇳🇬 Nigeria — FSBN</a>
+                <a class="schol-link" href="https://mastercardfdn.org/" target="_blank" rel="noopener">Mastercard Foundation Scholars</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= LATIN AMERICA ================= -->
+      <div class="schol-cat">
+        <button type="button" class="schol-cat-toggle" aria-expanded="false" aria-controls="schol-panel-latam">
+          <span class="schol-cat-icon">🌎</span>
+          <span class="schol-cat-title">Latin America</span>
+          <span class="schol-cat-count"></span>
+          <span class="plus-icon schol-plus" aria-hidden="true"></span>
+        </button>
+        <div class="schol-cat-panel" id="schol-panel-latam">
+          <div class="schol-cat-panel-inner">
+
+            <div class="schol-group">
+              <h4>Country Portals</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.gob.mx/conahcyt" target="_blank" rel="noopener">🇲🇽 Mexico — CONAHCYT</a>
+                <a class="schol-link" href="https://www.capes.gov.br/" target="_blank" rel="noopener">🇧🇷 Brazil — CAPES</a>
+                <a class="schol-link" href="https://www.anid.cl/" target="_blank" rel="noopener">🇨🇱 Chile — ANID</a>
+                <a class="schol-link" href="https://web.icetex.gov.co/" target="_blank" rel="noopener">🇨🇴 Colombia — ICETEX</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= RESEARCH & FOUNDATIONS ================= -->
+      <div class="schol-cat">
+        <button type="button" class="schol-cat-toggle" aria-expanded="false" aria-controls="schol-panel-research">
+          <span class="schol-cat-icon">🏛️</span>
+          <span class="schol-cat-title">Research Grants &amp; Foundations</span>
+          <span class="schol-cat-count"></span>
+          <span class="plus-icon schol-plus" aria-hidden="true"></span>
+        </button>
+        <div class="schol-cat-panel" id="schol-panel-research">
+          <div class="schol-cat-panel-inner">
+
+            <div class="schol-group">
+              <h4>Foundations &amp; Research Funding</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://www.humboldt-foundation.de/" target="_blank" rel="noopener">Humboldt Foundation</a>
+                <a class="schol-link" href="https://www.mariecuriealumni.eu/" target="_blank" rel="noopener">Marie Curie Alumni Association</a>
+                <a class="schol-link" href="https://research-and-innovation.ec.europa.eu/" target="_blank" rel="noopener">EU Research &amp; Innovation</a>
+                <a class="schol-link" href="https://www.wellcome.org/" target="_blank" rel="noopener">Wellcome Trust</a>
+                <a class="schol-link" href="https://www.leverhulme.ac.uk/" target="_blank" rel="noopener">Leverhulme Trust</a>
+                <a class="schol-link" href="https://www.royalsociety.org/" target="_blank" rel="noopener">Royal Society</a>
+                <a class="schol-link" href="https://www.britishacademy.ac.uk/" target="_blank" rel="noopener">British Academy</a>
+                <a class="schol-link" href="https://www.akai.org/" target="_blank" rel="noopener">AKAI</a>
+                <a class="schol-link" href="https://www.ashinaga.org/" target="_blank" rel="noopener">Ashinaga</a>
+                <a class="schol-link" href="https://www.mpowerfinancing.com/scholarships/" target="_blank" rel="noopener">MPOWER Financing Scholarships</a>
+                <a class="schol-link" href="https://www.peointernational.org/" target="_blank" rel="noopener">P.E.O. International</a>
+                <a class="schol-link" href="https://www.stampsscholars.org/" target="_blank" rel="noopener">Stamps Scholars</a>
+                <a class="schol-link" href="https://www.royalcommission.gov.sa/" target="_blank" rel="noopener">Royal Commission (Saudi Arabia)</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= SEARCH ENGINES & DIRECTORIES ================= -->
+      <div class="schol-cat">
+        <button type="button" class="schol-cat-toggle" aria-expanded="false" aria-controls="schol-panel-search">
+          <span class="schol-cat-icon">🔎</span>
+          <span class="schol-cat-title">Global Scholarship Search Engines &amp; Directories</span>
+          <span class="schol-cat-count"></span>
+          <span class="plus-icon schol-plus" aria-hidden="true"></span>
+        </button>
+        <div class="schol-cat-panel" id="schol-panel-search">
+          <div class="schol-cat-panel-inner">
+
+            <div class="schol-group">
+              <h4>Aggregators, Databases &amp; News Sites</h4>
+              <div class="schol-links">
+                <a class="schol-link" href="https://euscholarships.com/" target="_blank" rel="noopener">EU Scholarships</a>
+                <a class="schol-link" href="https://scholarshiproar.com/" target="_blank" rel="noopener">Scholarship Roar</a>
+                <a class="schol-link" href="https://scholarshipunion.com/" target="_blank" rel="noopener">Scholarship Union</a>
+                <a class="schol-link" href="https://opportunitiescorners.com/" target="_blank" rel="noopener">Opportunities Corners</a>
+                <a class="schol-link" href="https://scholarshipscorner.website/" target="_blank" rel="noopener">Scholarships Corner</a>
+                <a class="schol-link" href="https://opportunitydesk.org/" target="_blank" rel="noopener">Opportunity Desk</a>
+                <a class="schol-link" href="https://oyaop.com/" target="_blank" rel="noopener">Opportunities for Young Africans (OYAOP)</a>
+                <a class="schol-link" href="https://youthop.com/" target="_blank" rel="noopener">Youth Opportunities</a>
+                <a class="schol-link" href="https://scholarship-positions.com/" target="_blank" rel="noopener">Scholarship Positions</a>
+                <a class="schol-link" href="https://www.afterschoolafrica.com/" target="_blank" rel="noopener">After School Africa</a>
+                <a class="schol-link" href="https://scholarships.af/" target="_blank" rel="noopener">Scholarships.af</a>
+                <a class="schol-link" href="https://globalscholarships.com/" target="_blank" rel="noopener">Global Scholarships</a>
+                <a class="schol-link" href="https://www.wemakescholars.com/" target="_blank" rel="noopener">WeMakeScholars</a>
+                <a class="schol-link" href="https://www.helptostudy.com/" target="_blank" rel="noopener">Help to Study</a>
+                <a class="schol-link" href="https://www.scholars4dev.com/" target="_blank" rel="noopener">Scholars4Dev</a>
+                <a class="schol-link" href="https://www.pickascholarship.com/" target="_blank" rel="noopener">Pick a Scholarship</a>
+                <a class="schol-link" href="https://www.advance-africa.com/scholarships.html" target="_blank" rel="noopener">Advance Africa Scholarships</a>
+                <a class="schol-link" href="https://www.scholarshipportal.com/" target="_blank" rel="noopener">Scholarship Portal</a>
+                <a class="schol-link" href="https://www.scholarshipsads.com/" target="_blank" rel="noopener">Scholarships Ads</a>
+                <a class="schol-link" href="https://www.scholarships.com/" target="_blank" rel="noopener">Scholarships.com</a>
+                <a class="schol-link" href="https://www.fastweb.com/" target="_blank" rel="noopener">Fastweb</a>
+                <a class="schol-link" href="https://www.iefa.org/" target="_blank" rel="noopener">IEFA</a>
+                <a class="schol-link" href="https://www.internationalscholarships.com/" target="_blank" rel="noopener">International Scholarships</a>
+                <a class="schol-link" href="https://www.topuniversities.com/student-info/scholarship-advice" target="_blank" rel="noopener">TopUniversities — Scholarship Advice</a>
+                <a class="schol-link" href="https://www.scholarshiptab.com/" target="_blank" rel="noopener">ScholarshipTab</a>
+                <a class="schol-link" href="https://www.opportunitiesforafricans.com/" target="_blank" rel="noopener">Opportunities for Africans</a>
+                <a class="schol-link" href="https://www.scholarshipowl.com/" target="_blank" rel="noopener">ScholarshipOwl</a>
+                <a class="schol-link" href="https://bold.org/" target="_blank" rel="noopener">Bold.org</a>
+                <a class="schol-link" href="https://www.unigo.com/" target="_blank" rel="noopener">Unigo</a>
+                <a class="schol-link" href="https://www.careeronestop.org/" target="_blank" rel="noopener">CareerOneStop</a>
+                <a class="schol-link" href="https://bigfuture.collegeboard.org/" target="_blank" rel="noopener">BigFuture (College Board)</a>
+                <a class="schol-link" href="https://www.scholarshipamerica.org/" target="_blank" rel="noopener">Scholarship America</a>
+                <a class="schol-link" href="https://www.niche.com/" target="_blank" rel="noopener">Niche</a>
+                <a class="schol-link" href="https://www.goabroad.com/" target="_blank" rel="noopener">GoAbroad</a>
+                <a class="schol-link" href="https://www.studyportals.com/" target="_blank" rel="noopener">Studyportals</a>
+                <a class="schol-link" href="https://www.globalgrantapply.org/" target="_blank" rel="noopener">Global Grant Apply</a>
+                <a class="schol-link" href="https://www.educations.com/scholarships/" target="_blank" rel="noopener">Educations.com — Scholarships</a>
+                <a class="schol-link" href="https://www.mastersportal.com/scholarships/" target="_blank" rel="noopener">Mastersportal — Scholarships</a>
+                <a class="schol-link" href="https://www.phdportal.com/scholarships/" target="_blank" rel="noopener">PhDportal — Scholarships</a>
+                <a class="schol-link" href="https://www.bachelorsportal.com/scholarships/" target="_blank" rel="noopener">Bachelorsportal — Scholarships</a>
+                <a class="schol-link" href="https://www.distancelearningportal.com/" target="_blank" rel="noopener">Distance Learning Portal</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="schol-disclaimer">This directory links to official and third-party scholarship resources for convenience. Deadlines, eligibility and funding amounts change often — always confirm details on the official site before applying. malik.teaches is not affiliated with the organisations listed and does not process applications on their behalf.</p>
+
+  </div>
+</section>
+
+<script>
+  // ---------- scholarships directory: accordion + live search ----------
+  (function(){
+    const categories = document.querySelectorAll('#scholCategories .schol-cat');
+    if(!categories.length) return;
+
+    categories.forEach(cat=>{
+      const btn = cat.querySelector('.schol-cat-toggle');
+      const countEl = cat.querySelector('.schol-cat-count');
+      const linkCount = cat.querySelectorAll('.schol-link').length;
+      if(countEl) countEl.textContent = linkCount + (linkCount === 1 ? ' link' : ' links');
+
+      btn.addEventListener('click', ()=>{
+        const willOpen = !cat.classList.contains('is-open');
+        cat.classList.toggle('is-open', willOpen);
+        btn.setAttribute('aria-expanded', String(willOpen));
+      });
+    });
+
+    const searchInput = document.getElementById('scholSearch');
+    const countLabel = document.getElementById('scholSearchCount');
+    if(!searchInput || !countLabel) return;
+
+    const allLinks = Array.from(document.querySelectorAll('#scholCategories .schol-link'));
+    const totalLinks = allLinks.length;
+    const totalCats = categories.length;
+
+    function setDefaultCount(){
+      countLabel.textContent = totalLinks + ' scholarship & study links across ' + totalCats + ' categories';
+    }
+    setDefaultCount();
+
+    searchInput.addEventListener('input', ()=>{
+      const q = searchInput.value.trim().toLowerCase();
+      let visibleCount = 0;
+
+      categories.forEach(cat=>{
+        let catHasMatch = false;
+
+        cat.querySelectorAll('.schol-group').forEach(group=>{
+          let groupHasMatch = false;
+
+          group.querySelectorAll('.schol-link').forEach(link=>{
+            const isMatch = !q || link.textContent.toLowerCase().includes(q);
+            link.classList.toggle('is-hidden', !isMatch);
+            if(isMatch){ groupHasMatch = true; visibleCount++; }
+          });
+
+          group.classList.toggle('is-hidden', !groupHasMatch);
+          if(groupHasMatch) catHasMatch = true;
+        });
+
+        cat.classList.toggle('is-search-hidden', !catHasMatch);
+        const btn = cat.querySelector('.schol-cat-toggle');
+
+        if(q){
+          cat.classList.toggle('is-open', catHasMatch);
+          btn.setAttribute('aria-expanded', String(catHasMatch));
+        } else {
+          cat.classList.remove('is-open');
+          btn.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      if(q){
+        countLabel.textContent = visibleCount + ' of ' + totalLinks + ' links match "' + searchInput.value.trim() + '"';
+      } else {
+        setDefaultCount();
+      }
+    });
+  })();
+</script>
+
+<section class="cta" id="cta">
+  <div class="wrap">
+    <span class="eyebrow mono reveal" style="animation:none;">Let's Go</span>
+    <h2 class="reveal">Your next report card<br/><span class="grad">starts with one DM.</span></h2>
+    <a href="https://wa.me/923016777449" target="_blank" rel="noopener" class="magnetic-btn" id="magBtn"><span>Book your free trial class →</span></a>
+    <p class="mono reveal" style="margin-top:38px; color:var(--paper-dim); font-size:0.8rem; letter-spacing:0.04em;">Experience the classes on any of my channels below.</p>
+    <div class="socials reveal">
+      <a href="https://wa.me/923016777449" target="_blank" rel="noopener">💬 WhatsApp</a>
+      <a href="https://www.youtube.com/@malikteaches" target="_blank" rel="noopener">▶ YouTube</a>
+      <a href="https://www.tiktok.com/@malik.teaches?_r=1&_t=ZS-988LFZojCQ0" target="_blank" rel="noopener">🎵 TikTok</a>
+      <a href="https://www.instagram.com/malikteaches?utm_source=qr&igsh=aTh0aHhuZWY2ZmE=" target="_blank" rel="noopener">📸 Instagram</a>
+      <a href="https://www.linkedin.com/in/malikteaches?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener">in LinkedIn</a>
+    </div>
+
+    <p class="mono reveal" style="margin-top:56px; color:var(--paper-dim); font-size:0.8rem; letter-spacing:0.04em;">Enjoy the animation, enjoy the web experience.</p>
+
+    <!-- mini 2D game: tap the penguin, it races along the track past each grade milestone up to A* -->
+    <div class="cta-game-col reveal">
+      <div class="game-circle" id="gameCircle">
+        <svg class="game-track" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path class="track-base" id="gamePath" d="M150,270 C60,230 240,190 150,150 C60,110 240,70 150,30"/>
+          <path class="track-progress" id="gamePathProgress" d="M150,270 C60,230 240,190 150,150 C60,110 240,70 150,30"/>
+        </svg>
+
+        <div class="grade-marker" data-grade="E"><span>E</span></div>
+        <div class="grade-marker" data-grade="D"><span>D</span></div>
+        <div class="grade-marker" data-grade="C"><span>C</span></div>
+        <div class="grade-marker" data-grade="B"><span>B</span></div>
+        <div class="grade-marker" data-grade="A"><span>A</span></div>
+        <div class="grade-marker" data-grade="A*"><span>A*</span></div>
+
+        <div class="game-book-mascot" id="gameBookMascot">
+          <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M60 20 C48 10 28 8 12 12 L12 82 C28 78 48 80 60 90 Z" fill="#FF7A1A"/>
+            <path d="M60 20 C72 10 92 8 108 12 L108 82 C92 78 72 80 60 90 Z" fill="#E5383B"/>
+            <line x1="60" y1="20" x2="60" y2="90" stroke="#FFD23F" stroke-width="2"/>
+          </svg>
+          <div class="mascot-sparkles" id="mascotSparkles"></div>
+        </div>
+
+        <div class="game-character" id="gameChar" role="button" tabindex="0" aria-label="Tap the penguin to race from grade E to A*">
+          <svg viewBox="0 0 40 46" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="penguinBody" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#FF7A1A"/>
+                <stop offset="100%" stop-color="#E5383B"/>
+              </linearGradient>
+            </defs>
+            <path d="M6 20 Q0 26 6 34" fill="none" stroke="#FF7A1A" stroke-width="3.4" stroke-linecap="round"/>
+            <path d="M34 20 Q40 26 34 34" fill="none" stroke="#FF7A1A" stroke-width="3.4" stroke-linecap="round"/>
+            <ellipse cx="20" cy="26" rx="15" ry="18" fill="url(#penguinBody)"/>
+            <ellipse cx="20" cy="30" rx="9" ry="12" fill="#FFF7ED"/>
+            <circle cx="14" cy="18" r="2.2" fill="#0A0A0A"/>
+            <circle cx="26" cy="18" r="2.2" fill="#0A0A0A"/>
+            <path d="M17 21.5 L23 21.5 L20 26.5 Z" fill="#FFD23F"/>
+            <ellipse cx="11" cy="43" rx="5" ry="2.6" fill="#FFD23F"/>
+            <ellipse cx="29" cy="43" rx="5" ry="2.6" fill="#FFD23F"/>
+          </svg>
+        </div>
+
+        <span class="game-hint mono" id="gameHint">Tap the penguin — race to A*</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:12px;">
+    <span class="mono">© malik.teaches — Business, Accounts &amp; PSX, taught right</span>
+    <span class="mono">find me @malik.teaches everywhere</span>
+  </div>
+</footer>
+
+<!-- The single flying book logo lives here, as a direct child of <body> — deliberately outside
+     .hero-sticky. An ancestor with position:sticky always creates its own stacking context, which
+     was silently trapping the book's z-index inside the hero section and letting every later
+     section paint over it. Keeping it here means its z-index actually applies against the whole page. -->
+<a id="floatingBook" href="https://wa.me/923016777449" target="_blank" rel="noopener" aria-label="Book a free trial on WhatsApp">
+  <svg viewBox="0 0 120 100" xmlns="http://www.w3.org/2000/svg">
+    <path d="M60 20 C48 10 28 8 12 12 L12 82 C28 78 48 80 60 90 Z" fill="#FF7A1A"/>
+    <path class="book-page" d="M60 20 C72 10 92 8 108 12 L108 82 C92 78 72 80 60 90 Z" fill="#E5383B"/>
+    <line x1="60" y1="20" x2="60" y2="90" stroke="#FFD23F" stroke-width="2"/>
+  </svg>
+</a>
+
+<script>
+  // ---------- background music: plays assets/music.mp3 (drop your file in that folder) ----------
+  const bgMusic = document.getElementById('bgMusic');
+  const musicToggle = document.getElementById('musicToggle');
+  const eqBars = musicToggle.querySelectorAll('.eq-bar');
+  bgMusic.volume = 0.35;
+
+  function setMusicPlayingUI(isPlaying){
+    eqBars.forEach(b => b.classList.toggle('playing', isPlaying));
+  }
+
+  // shared play attempt used by both autoplay-on-load and the manual toggle
+  function playMusic(){
+    musicToggle.classList.add('is-loading');
+    return bgMusic.play()
+      .then(()=>{
+        musicToggle.classList.remove('is-loading');
+        setMusicPlayingUI(true);
+      })
+      .catch((err)=>{
+        musicToggle.classList.remove('is-loading');
+        setMusicPlayingUI(false);
+        return Promise.reject(err);
+      });
+  }
+
+  // the toggle button always works as a manual on/off switch, independent of autoplay
+  musicToggle.addEventListener('click', ()=>{
+    if(bgMusic.paused){
+      playMusic().catch(()=>{
+        // most likely assets/music.mp3 hasn't been added yet
+        console.warn('Could not play assets/music.mp3 — make sure the file exists in your assets folder.');
+      });
+    } else {
+      bgMusic.pause();
+      setMusicPlayingUI(false);
+    }
+  });
+
+  // try to start the music the instant the site finishes loading; most browsers block audio
+  // autoplay until the visitor has interacted with the page at least once, so if the initial
+  // attempt is blocked, fall back to starting on the very first tap/click/key press anywhere
+  // (skipping the toggle button itself, so a first click there is left to its own handler above).
+  function autoplayMusicOnLoad(){
+    playMusic().catch(()=>{
+      const resumeOnInteraction = (e)=>{
+        if (e.target && e.target.closest && e.target.closest('#musicToggle')) return;
+        playMusic().catch(()=>{});
+        window.removeEventListener('pointerdown', resumeOnInteraction);
+        window.removeEventListener('keydown', resumeOnInteraction);
+      };
+      window.addEventListener('pointerdown', resumeOnInteraction);
+      window.addEventListener('keydown', resumeOnInteraction);
+    });
+  }
+
+  // ---------- loading screen: breathing logo for 5s, then fade to site ----------
+  (function(){
+    var loadingScreen = document.getElementById('loadingScreen');
+    var LOAD_TIME = 5000;
+    function hideLoader(){
+      loadingScreen.classList.add('is-hidden');
+      document.body.classList.remove('is-loading');
+      loadingScreen.addEventListener('transitionend', function(){
+        loadingScreen.remove();
+      }, { once:true });
+      autoplayMusicOnLoad(); // site has now finished "loading" — try to start the music
+    }
+    window.setTimeout(hideLoader, LOAD_TIME);
+  })();
+
+  // ---------- custom cursor ----------
+  const cursor = document.getElementById('cursor');
+  window.addEventListener('mousemove', e=>{
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+
+  // ---------- glowing word trail: short motivational quote, word by word, fading as cursor moves ----------
+  (function(){
+    const QUOTES = [
+      "Small steps still move you.",
+      "Discipline beats motivation.",
+      "Keep going. You're close.",
+      "Progress, not perfection.",
+      "Show up. Every single day."
+    ];
+    const MIN_GAP_PX = 60;   // how far the mouse must move before the next word appears
+    const WORD_LIFETIME_MS = 2800;
+
+    let quoteIdx = 0;
+    let words = QUOTES[0].split(' ');
+    let wordIdx = 0;
+    let lastX = null, lastY = null;
+
+    function nextWord(){
+      const w = words[wordIdx];
+      wordIdx++;
+      if(wordIdx >= words.length){
+        wordIdx = 0;
+        quoteIdx = (quoteIdx + 1) % QUOTES.length;
+        words = QUOTES[quoteIdx].split(' ');
+      }
+      return w;
+    }
+
+    function spawnWord(x, y){
+      const el = document.createElement('span');
+      el.className = 'cursor-word';
+      el.textContent = nextWord();
+      // slight random offset so consecutive words don't sit exactly on the pointer
+      el.style.left = (x + (Math.random()*10 - 5)) + 'px';
+      el.style.top = (y + (Math.random()*10 - 5)) + 'px';
+      document.body.appendChild(el);
+      setTimeout(()=> el.remove(), WORD_LIFETIME_MS);
+    }
+
+    window.addEventListener('mousemove', e=>{
+      if(lastX === null){
+        lastX = e.clientX; lastY = e.clientY;
+        return;
+      }
+      const dx = e.clientX - lastX, dy = e.clientY - lastY;
+      if(Math.sqrt(dx*dx + dy*dy) >= MIN_GAP_PX){
+        spawnWord(e.clientX, e.clientY);
+        lastX = e.clientX; lastY = e.clientY;
+      }
+    });
+  })();
+  document.querySelectorAll('a, .card, [data-tilt], #musicToggle, .hover-text, .note-card').forEach(el=>{
+    el.addEventListener('mouseenter', ()=> cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', ()=> cursor.classList.remove('hover'));
+  });
+
+  // ---------- hero "opening box": panels separate, headline reveals ----------
+  const heroPin = document.getElementById('heroPin');
+  const heroInner = document.getElementById('heroInner');
+  const boxLeft = document.getElementById('boxLeft');
+  const boxRight = document.getElementById('boxRight');
+  const scrollCue = document.getElementById('scrollCue');
+  const floatingBook = document.getElementById('floatingBook');
+
+  function heroProgress(){
+    const pinTop = heroPin.offsetTop;
+    const pinHeight = heroPin.offsetHeight;
+    const viewport = window.innerHeight;
+    const raw = (window.scrollY - pinTop) / (pinHeight - viewport);
+    return Math.min(1, Math.max(0, raw));
+  }
+
+  function updateHero(){
+    const p = heroProgress();
+
+    // the two covers slide apart like an opening box lid
+    boxLeft.style.transform = `translateX(${-p*100}%)`;
+    boxRight.style.transform = `translateX(${p*100}%)`;
+
+    // headline underneath fades and rises into view as the box opens
+    const reveal = Math.min(1, p*2.2);
+    heroInner.style.opacity = reveal;
+    heroInner.style.transform = `translateY(${(1-reveal)*16}px)`;
+
+    if(p > 0.04){
+      scrollCue.style.animation = 'none';
+      scrollCue.style.opacity = 0;
+    } else {
+      scrollCue.style.animation = '';
+      scrollCue.style.opacity = '';
+    }
+
+    // magic flake burst the moment the "door" (box lid) starts to open
+    if(p > 0.02 && typeof window.spawnDoorFlakesOnce === 'function'){
+      window.spawnDoorFlakesOnce();
+    }
+  }
+
+  // ---------- Choose Your Future: expandable Business / Accountancy columns ----------
+  // Each column starts collapsed; clicking its heading reveals its timeline.
+  // The two columns are independent — opening one never affects the other.
+  document.querySelectorAll('.future-col-title').forEach(btn => {
+    const col = btn.closest('.future-col');
+    if(!col) return;
+    btn.addEventListener('click', () => {
+      const isOpen = col.classList.contains('is-open');
+      col.classList.toggle('is-open', !isOpen);
+      btn.setAttribute('aria-expanded', String(!isOpen));
+    });
+  });
+
+  // ---------- Choose Your Future: expandable timeline accordions ----------
+  // Each column (Business / Accountancy) behaves independently: opening one
+  // milestone smoothly expands it (height + opacity, via CSS grid-rows) and
+  // collapses any other open milestone in that same column — never across
+  // columns, and never navigating anywhere.
+  document.querySelectorAll('.timeline').forEach(timeline => {
+    const items = Array.from(timeline.querySelectorAll('.timeline-item'));
+    items.forEach(item => {
+      const header = item.querySelector('.timeline-header');
+      if(!header) return;
+      header.addEventListener('click', () => {
+        const wasOpen = item.classList.contains('is-open');
+        items.forEach(other => {
+          if(other === item) return;
+          other.classList.remove('is-open');
+          const otherHeader = other.querySelector('.timeline-header');
+          if(otherHeader) otherHeader.setAttribute('aria-expanded', 'false');
+        });
+        item.classList.toggle('is-open', !wasOpen);
+        header.setAttribute('aria-expanded', String(!wasOpen));
+      });
+    });
+  });
+
+  // ---------- scroll reveal ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold:0.15 });
+  revealEls.forEach(el=> io.observe(el));
+
+  // ---------------------------------------------------------------------------
+  // Single flying book logo — one element, three stops: hero -> circle in
+  // "Meet the Teacher" -> circle in "Levels".
+  //
+  // Two layers:
+  //  1) computeBookTarget() figures out WHERE the book should be right now,
+  //     purely from scroll position — and crucially, progress is measured
+  //     against the landing CIRCLE's own position, not the section's, so the
+  //     book can never be reported "100% arrived" while its destination is
+  //     still off-screen.
+  //  2) a requestAnimationFrame loop eases the book's on-screen position
+  //     toward that target every frame (not just on scroll events), which is
+  //     what gives it the slow, weighty, gliding feel instead of snapping
+  //     around with the scrollbar.
+  // ---------------------------------------------------------------------------
+  const bookCircle1 = document.getElementById('bookCircle1');
+  const bookCircle3 = document.getElementById('bookCircle3');
+  const meetSection = document.getElementById('meet');
+  const energyPipe = document.getElementById('energyPipe');
+  const energyPipeBase = document.getElementById('energyPipeBase');
+  const energyPipeFlow = document.getElementById('energyPipeFlow');
+  const teacherFrame = document.getElementById('teacherFrame');
+  const BASE_BOOK_SIZE = 92; // matches #floatingBook's natural width/height in CSS
+  const LAND_FILL = 0.8;     // book fills 80% of the landing anchor's size (no circle frame anymore, so it can be bigger)
+
+  // Traces the pipe from the landing circle to the photo/video frame. Works out on its own
+  // whether the two are side-by-side (desktop) or stacked (mobile) and connects whichever
+  // edges actually face each other, so it never has to be hand-tuned per breakpoint.
+  function updateEnergyPipe(){
+    if(!energyPipe || !meetSection || !bookCircle1 || !teacherFrame) return;
+    const sectionRect = meetSection.getBoundingClientRect();
+    const c = bookCircle1.getBoundingClientRect();
+    const f = teacherFrame.getBoundingClientRect();
+    if(!sectionRect.width || !c.width || !f.width) return;
+
+    energyPipe.setAttribute('width', sectionRect.width);
+    energyPipe.setAttribute('height', sectionRect.height);
+
+    const cCenterX = c.left + c.width / 2 - sectionRect.left;
+    const cCenterY = c.top + c.height / 2 - sectionRect.top;
+    const fCenterX = f.left + f.width / 2 - sectionRect.left;
+    const fCenterY = f.top + f.height / 2 - sectionRect.top;
+    const dx = fCenterX - cCenterX, dy = fCenterY - cCenterY;
+
+    let startX, startY, endX, endY, d;
+    if(Math.abs(dx) > Math.abs(dy)){
+      // side by side — leave from the circle's facing edge, arrive at the frame's facing edge
+      startX = dx > 0 ? (c.right - sectionRect.left) : (c.left - sectionRect.left);
+      startY = cCenterY;
+      endX = dx > 0 ? (f.left - sectionRect.left) : (f.right - sectionRect.left);
+      endY = fCenterY;
+      const midX = (startX + endX) / 2;
+      d = `M ${startX} ${startY} C ${midX} ${startY}, ${midX} ${endY}, ${endX} ${endY}`;
+    } else {
+      // stacked (mobile) — leave from the bottom/top of the circle, arrive top/bottom of the frame
+      startX = cCenterX;
+      startY = dy > 0 ? (c.bottom - sectionRect.top) : (c.top - sectionRect.top);
+      endX = fCenterX;
+      endY = dy > 0 ? (f.top - sectionRect.top) : (f.bottom - sectionRect.top);
+      const midY = (startY + endY) / 2;
+      d = `M ${startX} ${startY} C ${startX} ${midY}, ${endX} ${midY}, ${endX} ${endY}`;
+    }
+
+    energyPipeBase.setAttribute('d', d);
+    energyPipeFlow.setAttribute('d', d);
+  }
+
+  function lerp(a, b, t){ return a + (b - a) * t; }
+  function smoothstep(t){ return t * t * (3 - 2 * t); } // ease-in-out, used on the raw scroll progress
+
+  // 0 -> 1 as `el`'s own center travels from startVH of the viewport down to endVH of the viewport.
+  // Wide start/end spread = more scroll distance per flight = slower, subtler motion.
+  function scrollProgress(el, startVH = 1.05, endVH = 0.5){
+    const rect = el.getBoundingClientRect();
+    const vh = window.innerHeight;
+    const centerY = rect.top + rect.height / 2;
+    const start = vh * startVH, end = vh * endVH;
+    const raw = (start - centerY) / (start - end);
+    return smoothstep(Math.min(1, Math.max(0, raw)));
+  }
+
+  function pulseLanding(){
+    floatingBook.classList.remove('just-landed');
+    void floatingBook.offsetWidth; // restart the CSS animation even if triggered twice in a row
+    floatingBook.classList.add('just-landed');
+  }
+
+  // ---- the book "gives its energy" to a section the instant it lands on that section's circle:
+  // a light burst in the circle first, then the section's background warms, then its content
+  // pulses awake in a staggered wave — after which the circle settles into a slow, permanent
+  // breathing glow, as if the section is now alive. Runs once per circle (idempotent). ----
+  function spawnWakeBurst(circleEl){
+    const flash = document.createElement('span');
+    flash.className = 'circle-wake-flash';
+    circleEl.appendChild(flash);
+    flash.addEventListener('animationend', () => flash.remove());
+
+    for(let i = 0; i < 2; i++){
+      const ring = document.createElement('span');
+      ring.className = 'circle-wake-ring';
+      ring.style.animationDelay = (i * 0.18) + 's';
+      circleEl.appendChild(ring);
+      ring.addEventListener('animationend', () => ring.remove());
+    }
+  }
+
+  let frameEnergizeTimeout = null;
+
+  // a couple of small illustrations, themed per section, that drift down whenever that
+  // section's circle wakes — deliberately just 2 at a time so it stays a light touch
+  const FALL_ICON_SETS = {
+    meet:   ['👋', '🎉', '⭐', '📦', '😊'], // "Meet the Teacher" — a little greeting/welcome
+    future: ['💡', '🎓', '📊', '🚀', '⭐']  // "Choose Your Future" — a little spark of direction
+  };
+
+  function spawnFallingIllustrations(section, icons){
+    if(!section || !icons || !icons.length) return;
+    const pool = icons.slice();
+    for(let i = 0; i < 2 && pool.length; i++){
+      const icon = pool.splice(Math.floor(Math.random() * pool.length), 1)[0];
+      const el = document.createElement('span');
+      el.className = 'fall-item';
+      el.textContent = icon;
+      el.style.left = (12 + Math.random() * 76) + '%';
+      el.style.setProperty('--fall-rot', (Math.random() * 50 - 25) + 'deg');
+      el.style.setProperty('--fall-dur', (2.4 + Math.random() * 1.1) + 's');
+      el.style.animationDelay = (i * 0.2 + Math.random() * 0.15) + 's';
+      section.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+  }
+
+  function wakeSection(circleEl){
+    if(!circleEl || circleEl.classList.contains('is-awake')) return;
+
+    // 1) light animation in the circle itself, first
+    circleEl.classList.add('is-awake');
+    spawnWakeBurst(circleEl);
+
+    const section = circleEl.closest('section');
+    if(!section) return;
+
+    // 2) the section wakes up — background warms in
+    section.classList.add('is-awake');
+
+    // 3) its content breathes awake in a staggered wave, like energy spreading outward
+    const contentEls = section.querySelectorAll('.reveal');
+    contentEls.forEach((el, i) => {
+      window.setTimeout(() => {
+        el.classList.remove('wake-breathe');
+        void el.offsetWidth;
+        el.classList.add('wake-breathe');
+      }, 260 + i * 110);
+    });
+
+    // 3b) a couple of small themed illustrations fall through the section, celebrating the wake
+    const icons = FALL_ICON_SETS[section.id];
+    if(icons) spawnFallingIllustrations(section, icons);
+
+    // 4) energy travels down the pipe from the circle, then gradually powers up the frame
+    //    once it actually arrives — not before
+    if(circleEl === bookCircle1 && teacherFrame){
+      updateEnergyPipe();
+      clearTimeout(frameEnergizeTimeout);
+      frameEnergizeTimeout = window.setTimeout(() => {
+        teacherFrame.classList.add('frame-energized');
+      }, 820);
+    }
+  }
+
+  function sleepSection(circleEl){
+    if(!circleEl || !circleEl.classList.contains('is-awake')) return;
+    circleEl.classList.remove('is-awake');
+    // clear out any still-playing burst pieces so it goes quiet immediately, not mid-flash
+    circleEl.querySelectorAll('.circle-wake-flash, .circle-wake-ring').forEach(n => n.remove());
+
+    const section = circleEl.closest('section');
+    if(!section) return;
+    section.classList.remove('is-awake');
+    section.querySelectorAll('.wake-breathe').forEach(el => el.classList.remove('wake-breathe'));
+
+    // book has left — cut the energy immediately, whether or not it had reached the frame yet
+    if(circleEl === bookCircle1 && teacherFrame){
+      clearTimeout(frameEnergizeTimeout);
+      teacherFrame.classList.remove('frame-energized');
+    }
+  }
+
+  let landed1 = false, landed3 = false;
+  let activeCircle = null; // whichever circle the book is currently resting on, if any
+  const bookTarget = { x: 0, y: 0, scale: 1, rotate: 0, flying: false };
+
+  function computeBookTarget(){
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const isMobile = vw <= 860;
+    const p = heroProgress();
+
+    let x, y, scale, rotate = 0, flying = false;
+
+    if(p < 1){
+      // still inside the hero: the book lifts off and shrinks as the box lid opens
+      x = vw / 2;
+      y = vh / 2 - p * 0.46 * vh;
+      scale = 1 - p * 0.55;
+    } else {
+      // hero finished — resting "waiting" spot, top-right corner
+      const cornerSize = isMobile ? 44 : 64;
+      const cornerX = isMobile ? vw - 16 - cornerSize / 2 : vw - vw * 0.05 - cornerSize / 2;
+      const cornerY = isMobile ? vh - 90 - cornerSize / 2 : vh * 0.18;
+      const cornerScale = cornerSize / BASE_BOOK_SIZE;
+
+      x = cornerX; y = cornerY; scale = cornerScale;
+
+      if(bookCircle1){
+        const t1 = scrollProgress(bookCircle1);
+        const r1 = bookCircle1.getBoundingClientRect();
+        const c1x = r1.left + r1.width / 2, c1y = r1.top + r1.height / 2;
+        const c1scale = (Math.min(r1.width, r1.height) * LAND_FILL) / BASE_BOOK_SIZE;
+
+        x = lerp(cornerX, c1x, t1);
+        y = lerp(cornerY, c1y, t1);
+        scale = lerp(cornerScale, c1scale, t1);
+        if(t1 > 0.002 && t1 < 0.998){
+          y -= Math.sin(t1 * Math.PI) * 45;      // gentle upward arc mid-flight
+          rotate = Math.sin(t1 * Math.PI * 2) * 7; // slight bank left-right, realistic 2D flutter
+          flying = true;
+        }
+
+        if(t1 >= 0.998){ if(!landed1){ landed1 = true; pulseLanding(); } } else landed1 = false;
+
+        // which circle (if any) the book is exactly resting on right now
+        let currentCircle = t1 >= 0.998 ? bookCircle1 : null;
+
+        // second (and final) leg: from circle1's landing spot on to circle3, in "Choose Your Future"
+        if(bookCircle3 && t1 >= 0.998){
+          const t3 = scrollProgress(bookCircle3);
+          const r3 = bookCircle3.getBoundingClientRect();
+          const c3x = r3.left + r3.width / 2, c3y = r3.top + r3.height / 2;
+          const c3scale = (Math.min(r3.width, r3.height) * LAND_FILL) / BASE_BOOK_SIZE;
+
+          x = lerp(c1x, c3x, t3);
+          y = lerp(c1y, c3y, t3);
+          scale = lerp(c1scale, c3scale, t3);
+          if(t3 > 0.002 && t3 < 0.998){
+            y -= Math.sin(t3 * Math.PI) * 45;
+            rotate = Math.sin(t3 * Math.PI * 2) * 7;
+            flying = true;
+          }
+
+          if(t3 >= 0.998){ if(!landed3){ landed3 = true; pulseLanding(); } currentCircle = bookCircle3; } else landed3 = false;
+        } else {
+          landed3 = false;
+        }
+
+        // the circle only ever glows/breathes while the book is physically sitting on it —
+        // the instant it's not (mid-flight, or resting on a different circle), it goes dark again
+        if(currentCircle !== activeCircle){
+          if(activeCircle) sleepSection(activeCircle);
+          if(currentCircle) wakeSection(currentCircle);
+          activeCircle = currentCircle;
+        }
+      } else if(activeCircle){
+        sleepSection(activeCircle);
+        activeCircle = null;
+      }
+    }
+
+    bookTarget.x = x; bookTarget.y = y; bookTarget.scale = scale;
+    bookTarget.rotate = rotate; bookTarget.flying = flying;
+  }
+
+  // current on-screen values, eased toward bookTarget every animation frame
+  const bookCurrent = { x: 0, y: 0, scale: 1, rotate: 0, ready: false };
+  const SMOOTH = 0.045; // lower = slower / more syrupy trailing motion
+
+  function tickBook(){
+    if(!bookCurrent.ready){
+      // snap to the correct spot on first paint so it doesn't fly in from (0,0) on load
+      bookCurrent.x = bookTarget.x; bookCurrent.y = bookTarget.y;
+      bookCurrent.scale = bookTarget.scale; bookCurrent.rotate = bookTarget.rotate;
+      bookCurrent.ready = true;
+    } else {
+      bookCurrent.x += (bookTarget.x - bookCurrent.x) * SMOOTH;
+      bookCurrent.y += (bookTarget.y - bookCurrent.y) * SMOOTH;
+      bookCurrent.scale += (bookTarget.scale - bookCurrent.scale) * SMOOTH;
+      bookCurrent.rotate += (bookTarget.rotate - bookCurrent.rotate) * SMOOTH;
+    }
+
+    floatingBook.classList.toggle('is-flying', bookTarget.flying);
+    floatingBook.style.transform =
+      `translate(${bookCurrent.x}px, ${bookCurrent.y}px) translate(-50%,-50%) scale(${bookCurrent.scale}) rotate(${bookCurrent.rotate}deg)`;
+
+    requestAnimationFrame(tickBook);
+  }
+
+  function onScrollOrResize(){
+    updateHero();
+    computeBookTarget();
+    updateEnergyPipe();
+  }
+  window.addEventListener('scroll', onScrollOrResize, {passive:true});
+  window.addEventListener('resize', onScrollOrResize);
+  onScrollOrResize();
+  requestAnimationFrame(tickBook);
+
+  // ---------- card tilt ----------
+  document.querySelectorAll('[data-tilt]').forEach(card=>{
+    card.addEventListener('mousemove', e=>{
+      const rect = card.getBoundingClientRect();
+      const px = (e.clientX - rect.left)/rect.width - 0.5;
+      const py = (e.clientY - rect.top)/rect.height - 0.5;
+      card.style.transform = `perspective(700px) rotateX(${py*-8}deg) rotateY(${px*8}deg) translateY(-4px)`;
+    });
+    card.addEventListener('mouseleave', ()=>{
+      card.style.transform = 'perspective(700px) rotateX(0) rotateY(0) translateY(0)';
+    });
+  });
+
+  // ---------- magnetic button ----------
+  const magBtn = document.getElementById('magBtn');
+  magBtn.addEventListener('mousemove', e=>{
+    const rect = magBtn.getBoundingClientRect();
+    const px = (e.clientX - rect.left) - rect.width/2;
+    const py = (e.clientY - rect.top) - rect.height/2;
+    magBtn.style.transform = `translate(${px*0.25}px, ${py*0.5}px)`;
+  });
+  magBtn.addEventListener('mouseleave', ()=>{
+    magBtn.style.transform = 'translate(0,0)';
+  });
+
+  // ---------- hero mini-game: tap the penguin, it races the track past each grade milestone up to A* ----------
+  (function(){
+    const trackPath = document.getElementById('gamePath');
+    const progressPath = document.getElementById('gamePathProgress');
+    const gameChar = document.getElementById('gameChar');
+    const markers = document.querySelectorAll('#gameCircle .grade-marker');
+    const mascot = document.getElementById('gameBookMascot');
+    const sparkleHost = document.getElementById('mascotSparkles');
+    const hint = document.getElementById('gameHint');
+    if(!trackPath || !gameChar || !markers.length) return;
+
+    const total = trackPath.getTotalLength();
+    progressPath.style.strokeDasharray = total;
+    progressPath.style.strokeDashoffset = total;
+
+    // 6 stops along the track: E, D, C, B, A, A*
+    const fractions = [0.04, 0.22, 0.40, 0.58, 0.76, 0.97];
+    const points = fractions.map(f => trackPath.getPointAtLength(f * total));
+
+    markers.forEach((m, i)=>{
+      const pt = points[i];
+      m.style.left = (pt.x / 300 * 100) + '%';
+      m.style.top = (pt.y / 300 * 100) + '%';
+    });
+
+    function placeChar(i){
+      const pt = points[i];
+      gameChar.style.left = (pt.x / 300 * 100) + '%';
+      gameChar.style.top = (pt.y / 300 * 100) + '%';
+    }
+    placeChar(0);
+
+    let running = false, achieved = false;
+
+    function reset(){
+      markers.forEach(m => m.classList.remove('is-passed'));
+      mascot.classList.remove('is-swirling');
+      sparkleHost.innerHTML = '';
+      progressPath.style.strokeDashoffset = total;
+      placeChar(0);
+      achieved = false;
+      hint.classList.remove('is-hidden');
+    }
+
+    function spawnSparkles(){
+      for(let i = 0; i < 16; i++){
+        const s = document.createElement('span');
+        s.className = 'mascot-spark';
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 26 + Math.random() * 32;
+        s.style.setProperty('--sx', Math.cos(angle) * dist + 'px');
+        s.style.setProperty('--sy', Math.sin(angle) * dist + 'px');
+        s.style.left = '50%'; s.style.top = '50%';
+        s.style.animationDelay = (Math.random() * 0.15) + 's';
+        sparkleHost.appendChild(s);
+        s.addEventListener('animationend', () => s.remove());
+      }
+    }
+
+    function playSequence(){
+      running = true;
+      hint.classList.add('is-hidden');
+
+      fractions.forEach((f, i)=>{
+        setTimeout(()=>{
+          placeChar(i);
+          progressPath.style.strokeDashoffset = total - (f * total);
+          gameChar.classList.remove('char-hop');
+          void gameChar.offsetWidth;
+          gameChar.classList.add('char-hop');
+          if(i > 0) markers[i].classList.add('is-passed');
+
+          if(i === fractions.length - 1){
+            running = false;
+            achieved = true;
+            setTimeout(()=>{
+              mascot.classList.add('is-swirling');
+              spawnSparkles();
+            }, 220);
+          }
+        }, i * 650);
+      });
+    }
+
+    function handleActivate(){
+      if(running) return;
+      if(achieved){ reset(); setTimeout(playSequence, 60); return; }
+      playSequence();
+    }
+
+    // pointerdown fires the instant a finger/mouse makes contact (before the idle bob can drift
+    // the target out from under a slower 'click'/'touchend' hit-test) — click/touchstart are kept
+    // as redundant fallbacks for older browsers; handleActivate's `running` guard makes it safe
+    // for more than one of these to fire for the same tap.
+    gameChar.addEventListener('pointerdown', handleActivate);
+    gameChar.addEventListener('click', handleActivate);
+    gameChar.addEventListener('touchstart', handleActivate, { passive: true });
+    gameChar.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); handleActivate(); }
+    });
+  })();
+
+  // ---------- meet-the-teacher intro video: opens in a fixed-position lightbox (never affects
+  // page layout or the floating book's landing spot) and shows a fallback until intro.mp4 exists ----------
+  (function(){
+    const btn = document.getElementById('watchIntroBtn');
+    const lightbox = document.getElementById('videoLightbox');
+    const closeBtn = document.getElementById('videoLightboxClose');
+    const vid = document.getElementById('teacherVideo');
+    const fallback = document.getElementById('videoFallback');
+    if(!btn || !lightbox || !vid || !fallback) return;
+
+    vid.addEventListener('loadedmetadata', ()=>{
+      vid.style.display = 'block';
+      fallback.style.display = 'none';
+    });
+    vid.addEventListener('error', ()=>{
+      vid.style.display = 'none';
+      fallback.style.display = 'flex';
+    });
+
+    function openLightbox(){
+      lightbox.classList.add('is-open');
+      if(vid.getAttribute('src') || vid.querySelector('source[src]')){
+        vid.load();
+      }
+    }
+    function closeLightbox(){
+      lightbox.classList.remove('is-open');
+      vid.pause();
+    }
+
+    btn.addEventListener('click', openLightbox);
+    closeBtn.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e)=>{ if(e.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeLightbox(); });
+  })();
+
+  // ---------- magic flake burst when the hero "door" (box lid) opens ----------
+  (function(){
+    const heroStickyEl = document.getElementById('heroSticky');
+    if(!heroStickyEl) return;
+    const flakeHost = document.createElement('div');
+    flakeHost.id = 'doorFlakes';
+    flakeHost.style.cssText = 'position:absolute; inset:0; z-index:40; pointer-events:none; overflow:hidden;';
+    heroStickyEl.appendChild(flakeHost);
+    let fired = false;
+
+    window.spawnDoorFlakesOnce = function(){
+      if(fired) return;
+      fired = true;
+      for(let i = 0; i < 34; i++){
+        const f = document.createElement('span');
+        f.className = 'door-flake';
+        const size = 4 + Math.random() * 6;
+        f.style.width = size + 'px';
+        f.style.height = size + 'px';
+        f.style.left = (Math.random() * 100) + '%';
+        f.style.top = (35 + Math.random() * 25) + '%';
+        f.style.setProperty('--fx', ((Math.random() * 120) - 60) + 'px');
+        f.style.animationDuration = (1.1 + Math.random() * 0.9) + 's';
+        f.style.animationDelay = (Math.random() * 0.45) + 's';
+        flakeHost.appendChild(f);
+        f.addEventListener('animationend', () => f.remove());
+      }
+    };
+  })();
+
+</script>
+</body>
+</html>
