@@ -1,0 +1,8 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <rect width="120" height="120" rx="24" fill="#0A0A0A"/>
+  <g transform="translate(9,17) scale(0.85)">
+    <path d="M60 20 C48 10 28 8 12 12 L12 82 C28 78 48 80 60 90 Z" fill="#FF7A1A"/>
+    <path d="M60 20 C72 10 92 8 108 12 L108 82 C92 78 72 80 60 90 Z" fill="#E5383B"/>
+    <line x1="60" y1="20" x2="60" y2="90" stroke="#FFD23F" stroke-width="3"/>
+  </g>
+</svg>
